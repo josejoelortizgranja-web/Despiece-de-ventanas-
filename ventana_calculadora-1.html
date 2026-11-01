@@ -1,0 +1,1628 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box}
+html{height:100%;background:#0a1220;margin:0;padding:0;overflow-x:hidden}
+html.light,body.light{background:#f0f4f8}
+body{background:#0a1220;color:#e2e8f0;font-family:sans-serif;padding:6px;margin:0;font-size:10px;padding-bottom:80px;min-height:100%;min-height:100dvh;width:100%;max-width:100%;overflow-x:hidden;transition:background .3s,color .3s}
+body.light{background:#f0f4f8;color:#1a202c}
+.c{background:#132034;padding:8px 10px;border-radius:12px;margin-bottom:10px;border:1px solid #1e3a5f;transition:background .3s,border-color .3s;width:100%;max-width:100%;overflow-x:auto}
+body.light .c{background:#fff;border-color:#cbd5e1;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+h3{color:#38bdf8;margin:4px 0 8px 0;font-size:12px}
+body.light h3{color:#0284c7}
+input,select{width:100%;padding:5px 6px;border-radius:6px;border:1px solid #2a4a7a;background:#0a1220;color:#fff;margin:2px 0;box-sizing:border-box;font-size:10px;text-overflow:ellipsis}
+body.light input,body.light select{background:#f8fafc;color:#1e293b;border-color:#94a3b8}
+button{width:100%;padding:6px 8px;background:#2ea8ff;color:#000;font-weight:700;border-radius:8px;border:0;margin-top:4px;font-size:10px;cursor:pointer;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:10.5px;max-width:100%}
+th{color:#38bdf8;text-align:left;padding:4px;border-bottom:1px solid #2a4a7a;font-size:11px}
+body.light th{color:#0284c7;border-bottom-color:#cbd5e1}
+td{padding:5px 4px;border-bottom:1px solid #1a2e4a}
+body.light td{border-bottom-color:#e2e8f0}
+canvas{background:#0b172a;border-radius:10px;width:100%;height:auto;border:1px solid #2a4a7a}
+body.light canvas{border-color:#94a3b8}
+.naveRow{display:flex;gap:6px;align-items:center;background:#0a1220;padding:5px 8px;border-radius:8px;margin:4px 0;border:1px solid #1e3a5f;flex-wrap:wrap;font-size:11px}
+body.light .naveRow{background:#f1f5f9;border-color:#cbd5e1}
+.row2{display:flex;gap:6px;align-items:flex-end;margin-bottom:2px}.row2 div{flex:1;min-width:0}
+.cantRojo{color:#ff3b3b;font-weight:900;font-size:12px}
+.cantAzul{color:#38bdf8;font-weight:900;font-size:12px}
+.formVerde{color:#22c55e;font-weight:900}
+.locked input{background:#1a1a1a;color:#666;border-color:#333;pointer-events:none}
+body.light .locked input{background:#e2e8f0;color:#94a3b8;border-color:#cbd5e1}
+.m2Box{background:#061a06;border:1px solid #22c55e;padding:8px;border-radius:8px;margin:6px 0;font-size:11px;color:#e2e8f0}
+body.light .m2Box{background:#f0fdf4;border-color:#16a34a;color:#1a202c}
+.filaCosto{display:flex;flex-direction:column;background:#0a1220;border:1px solid #1e3a5f;padding:6px 8px;border-radius:8px;margin:4px 0;font-size:10.5px}
+body.light .filaCosto{background:#f8fafc;border-color:#cbd5e1}
+.headerBar{display:flex;flex-direction:column;gap:5px;background:#0d1b2a;padding:6px 8px;border-radius:12px;margin-bottom:8px;border:1px solid #1e3a5f;position:sticky;top:0;z-index:50;box-shadow:0 2px 12px rgba(0,0,0,.25);width:100%;max-width:100%}
+body.light .headerBar{background:#e0f2fe;border-color:#7dd3fc;box-shadow:0 2px 10px rgba(14,165,233,.12)}
+.headerBar .hdrTop{display:flex;gap:6px;align-items:center;width:100%}
+.headerBar .hdrRows{display:flex;flex-wrap:wrap;gap:4px;width:100%}
+.headerBar .logo{color:#38bdf8;font-size:12px;font-weight:900;white-space:nowrap;letter-spacing:.2px;flex-shrink:0}
+.headerBar .hdrGroup{display:flex;gap:4px;align-items:center;padding:3px 4px;background:rgba(15,30,50,.45);border:1px solid #1e3a5f;border-radius:8px;flex:1;min-width:fit-content}
+body.light .headerBar .hdrGroup{background:rgba(255,255,255,.55);border-color:#bae6fd}
+.headerBar .hdrGroup.proj{flex:2;min-width:200px}
+.headerBar input#proyNombre{flex:1;min-width:0;padding:5px 8px;margin:0;border-radius:6px;font-size:11px}
+.headerBar button{width:auto;flex:1;height:26px;padding:0 5px;margin:0;font-size:9px;font-weight:700;border-radius:6px;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;gap:3px;line-height:1;box-shadow:0 1px 0 rgba(0,0,0,.15);overflow:hidden;min-width:0}
+.headerBar button .ico{font-size:10px;line-height:1;flex-shrink:0}
+.headerBar button:active{transform:scale(.97)}
+.empresaBox{display:flex;align-items:center;gap:6px;background:#0a1220;border:1px dashed #38bdf8;border-radius:8px;padding:4px 6px;flex:1;min-width:0}
+body.light .empresaBox{background:#f0f9ff;border-color:#0284c7}
+.empresaLogo{width:36px;height:36px;border-radius:6px;object-fit:contain;background:#fff;border:1px solid #334155;cursor:pointer;flex-shrink:0}
+.empresaLogoEmpty{width:36px;height:36px;border-radius:6px;border:1px dashed #64748b;display:flex;align-items:center;justify-content:center;font-size:9px;color:#94a3b8;cursor:pointer;text-align:center;line-height:1.1;background:#0a1220;flex-shrink:0}
+body.light .empresaLogoEmpty{background:#f8fafc;color:#64748b}
+.empresaNombre{flex:1;min-width:0;width:auto;padding:4px 6px;margin:0;font-size:11px;font-weight:700;border-radius:5px}
+.fabBar{position:fixed;bottom:16px;right:12px;display:flex;flex-direction:column;gap:6px;z-index:100;align-items:center}
+.fabBar.hidden{display:none}
+.fabBar button{width:32px;height:32px;min-width:32px;padding:0;border-radius:50%;box-shadow:0 3px 12px rgba(0,0,0,.4);font-size:12px;margin:0;display:flex;align-items:center;justify-content:center;line-height:1}
+.fabToggle{position:fixed;bottom:16px;right:12px;width:32px;height:32px;border-radius:50%;background:#64748b;color:#fff;border:0;font-size:12px;z-index:101;box-shadow:0 2px 10px rgba(0,0,0,.35);cursor:pointer;display:none;align-items:center;justify-content:center;padding:0}
+.fabToggle.show{display:flex}
+.itemCard{background:#0a1220;border:1px solid #1e3a5f;border-radius:8px;padding:6px 8px;margin:3px 0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px}
+body.light .itemCard{background:#f1f5f9;border-color:#cbd5e1}
+.itemCard.active{border-color:#22c55e;background:#0a2a12}
+body.light .itemCard.active{border-color:#16a34a;background:#dcfce7}
+.itemCard .delBtn{width:24px;height:22px;padding:0;background:#ef4444;color:#fff;border-radius:4px;font-size:10px;margin:0;line-height:22px}
+#itemsList{max-height:140px;overflow-y:auto;margin-bottom:6px}
+.planoCard{background:#0a1220;border:1px solid #1e3a5f;border-radius:12px;padding:12px;margin:10px 0}
+body.light .planoCard{background:#fff;border-color:#cbd5e1;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.planoCard h4{color:#38bdf8;margin:0 0 6px;font-size:13px}
+body.light .planoCard h4{color:#0284c7}
+.planoCard canvas{width:100%;max-width:900px;height:auto;border-radius:10px;border:1px solid #2a4a7a;background:#0b172a;display:block;margin:0 auto}
+body.light .planoCard canvas{border-color:#94a3b8}
+.planoCard .meta{color:#94a3b8;font-size:11px;margin-top:6px;line-height:1.4}
+body.light .planoCard .meta{color:#475569}
+</style></head><body>
+<div class="headerBar">
+  <div class="hdrTop">
+    <div class="empresaBox" title="Logo y nombre de la empresa">
+      <div id="empresaLogoWrap">
+        <div class="empresaLogoEmpty" id="empresaLogoEmpty" onclick="document.getElementById('empresaLogoInput').click()">Logo<br>+</div>
+        <img id="empresaLogoImg" class="empresaLogo" style="display:none" onclick="document.getElementById('empresaLogoInput').click()" alt="Logo">
+      </div>
+      <input type="file" id="empresaLogoInput" accept="image/*" style="display:none" onchange="cargarLogoEmpresa(this)">
+      <input id="empresaNombre" class="empresaNombre" placeholder="Nombre empresa" oninput="saveEmpresa()">
+    </div>
+  </div>
+  <div class="hdrRows">
+    <div class="hdrGroup">
+      <button onclick="toggleTheme()" id="themeBtn" style="background:#1e293b;color:#f8fafc;border:1px solid #64748b" title="Tema">&#x2600;&#xFE0F; / &#x1F319;</button>
+      <button onclick="toggleFab()" id="fabHdrBtn" style="background:#22c55e;color:#000" title="Mostrar/ocultar botones flotantes"><span class="ico">&#x1F4A1;</span> FABs</button>
+    </div>
+    <div class="hdrGroup proj">
+      <input id="proyNombre" placeholder="Nombre del proyecto">
+      <button onclick="guardarProyecto()" style="background:#22c55e;color:#000" title="Guardar proyecto"><span class="ico">&#x1F4BE;</span> Guardar</button>
+      <button onclick="abrirProyecto()" style="background:#38bdf8;color:#000" title="Abrir proyecto"><span class="ico">&#x1F4C2;</span> Abrir</button>
+    </div>
+    <div class="hdrGroup">
+      <button onclick="recordarConfig()" style="background:#a78bfa;color:#000" title="Recordar configuración"><span class="ico">&#x1F4CC;</span> Config</button>
+      <button onclick="preguntarPDF()" style="background:#22c55e;color:#000" title="Generar PDF"><span class="ico">&#x1F4C4;</span> PDF</button>
+      <button onclick="abrirVentanaPlanos()" style="background:#a78bfa;color:#000" title="Abrir ventana solo con planos"><span class="ico">&#x2197;</span> Planos</button>
+    </div>
+  </div>
+</div>
+<div class="c"><h3>Ventanas del proyecto <button onclick="addVentana()" style="width:auto;padding:3px 8px;background:#22c55e;display:inline;margin-left:8px;font-size:10px">+ Agregar Ventana</button></h3>
+<div id="itemsList"></div>
+</div>
+<div class="c"><h3>Entrada <span id="itemActivoTxt" style="color:#facc15;font-size:11px"></span></h3><div class="row2"><div>Referencia<select id="ref"></select></div><div><button onclick="nuevaRef()" style="background:#22c55e;padding:6px">+ NUEVA REF</button></div></div>
+<div class="row2"><div>Rieles<select id="rieles" onchange="onRielesChange()"><option value="2">2 Rieles</option><option value="3">3 Rieles</option></select></div><div>Color Ventana<select id="colorV" onchange="calcular()"></select><div class="row2"><input id="newColorV" placeholder="Nuevo color"><button onclick="addColorV()" style="padding:4px 6px;background:#22c55e">+ Color</button></div></div><div>Color Vidrio<select id="colorVid" onchange="calcular()"></select><div class="row2"><input id="newColorVid" placeholder="Nuevo vidrio"><button onclick="addColorVid()" style="padding:4px 6px;background:#facc15;color:#000">+ Vidrio</button></div></div></div>
+<div class="row2"><div>Precio Vidrio $/m² (<span id="vidRefTxt" style="color:#22c55e"></span>)<input id="precioVidM2" type="number" oninput="saveVidrio()"></div><div>Grosor Vidrio<input id="grosorVid" placeholder="ej: 4mm" oninput="saveVidrio()"></div></div>
+<div id="sillar7038Box" style="display:none;background:#061a2a;padding:6px;border-radius:8px;border:2px dashed #facc15;margin:4px 0;color:#e2e8f0"><b style="color:#facc15">7038 - TIPO DE SILLAR:</b><div class="row2"><label style="background:#0a1220;border:1px solid #22c55e;padding:6px;border-radius:6px;display:flex;gap:6px;align-items:center;color:#86efac"><input type="radio" name="sillar7038" id="sillarEmp" value="empotrar" checked onchange="saveSillar7038();renderCalib();calcular()" style="width:auto"> Sillar de Empotrar</label><label style="background:#0a1220;border:1px solid #facc15;padding:6px;border-radius:6px;display:flex;gap:6px;align-items:center;color:#fde68a"><input type="radio" name="sillar7038" id="sillarSobre" value="sobreponer" onchange="saveSillar7038();renderCalib();calcular()" style="width:auto"> Sillar de Sobreponer</label></div></div>
+Naves<select id="naves" onchange="genNaves();renderHorizForm();renderCalib();saveCurrentItem();calcular()"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select><div id="navesCfg"></div>
+<div style="background:#0a1220;padding:6px;border-radius:8px;border:1px dashed #facc15;margin:4px 0;color:#e2e8f0"><label style="color:#e2e8f0"><input type="checkbox" id="alfajia" style="width:auto" onchange="document.getElementById('alfBox').style.display=this.checked?'block':'none';calcular()"> Incluir Alfajía - <span id="alfRefRielTxt" style="color:#22c55e"></span></label><div id="alfBox" style="display:none"><div class="row2"><div>Fórmula Alfajía (<span id="alfRefTxt"></span>)<input id="alfForm" oninput="saveAlf()"></div><div>Cantidad<input id="alfCant" oninput="saveAlf()"></div></div><div>Precio Alfajía <span id="alfRefRielPrecioTxt" style="color:#facc15"></span><input id="alfPrecio" type="number" oninput="saveAlfPrecioRiel(this.value)"></div></div></div>
+<div class="row2"><div>Ancho cm<input id="A" value="300" type="number" oninput="calcular()"></div><div>Alto cm<input id="H" value="150" type="number" oninput="calcular()"></div></div>
+<div class="row2"><div>Cantidad Ventanas<input id="cantVent" value="1" type="number" oninput="calcular()"></div><div>Mano obra $ x m² (<span id="manoRefTxt" style="color:#22c55e"></span>)<input id="manoObraM2" type="number" oninput="saveMano()"></div></div>
+<div class="row2"><div>Precio venta $/m² (<span id="ventaRefTxt" style="color:#22c55e"></span>)<input id="precioVentaM2" type="number" oninput="saveVenta()"></div><div>% Ganancia esperada (<span id="pctRefTxt" style="color:#22c55e"></span>)<input id="pctGanancia" type="number" oninput="saveVenta()" placeholder="ej: 30"></div></div>
+<div class="m2Box"><div style="display:flex;justify-content:space-between">m² x ventana: <b id="m2Vent" style="color:#22c55e">0 m²</b></div><div style="display:flex;justify-content:space-between">m² total (<span id="m2CantTxt">1</span> vent): <b id="m2Total" style="color:#22c55e">0 m²</b></div><div style="display:flex;justify-content:space-between">Mano obra total: <b id="costoMano" style="color:#facc15">$0</b></div><div style="display:flex;justify-content:space-between">Chapas (tu eliges por nave): <b id="chapasTxt" style="color:#facc15">0</b></div><div style="display:flex;justify-content:space-between">Empaque total: <b id="empaqueTxt" style="color:#38bdf8">0 ml</b></div><div id="sillar7038Info" style="color:#facc15;font-size:11px"></div></div>
+<details open><summary style="color:#38bdf8;cursor:pointer">&#x2699; Calibración <span id="lockTxt" style="color:#facc15">[BLOQUEADO]</span></summary>
+<button onclick="toggleLock()" id="lockBtn" style="background:#ef4444;color:#fff;padding:5px 8px;font-size:10px">&#x1F512; BLOQUEADO</button>
+<div id="calibBox">
+<div style="background:#061a2a;border:1px dashed #38bdf8;padding:6px;border-radius:8px;margin:4px 0">
+  <b style="color:#38bdf8">GUÍAS EN ZÓCALOS (solo mm)</b>
+  <div style="color:#94a3b8;font-size:10px;margin:3px 0 4px 0">Valor total de las guías por cada zócalo. Ej: 4 mm = 2 mm por lado (2 guías por nave).</div>
+  <div class="row2" style="margin-top:2px">
+    <div>Total guías por zócalo (mm)<input id="anchoGuiasInput" type="number" value="0" step="any" min="0" oninput="saveAnchoGuias()" placeholder="ej: 4"></div>
+    <div>Descuento en zócalos<select id="descuentoGuiasSel" onchange="saveAnchoGuias()"><option value="no">No se descuenta</option><option value="si">Sí se descuenta de los zócalos</option></select></div>
+  </div>
+</div>
+<div style="background:#061a2a;border:1px dashed #38bdf8;padding:6px;border-radius:8px;margin:4px 0"><b style="color:#38bdf8">HORIZONTALES PARA <span id="refTxt" style="color:#22c55e">744</span> - VARIA POR RIELES Y NAVES</b><div id="horizCalib"></div></div>
+<div id="calib"></div>
+<div style="margin-top:6px;border-top:1px solid #2a4a7a;padding-top:4px"><b style="color:#22c55e">Agregar perfil a esta referencia:</b><div class="row2"><div><input id="newEl" placeholder="Nombre perfil"></div><div><input id="newForm" placeholder="Formula"></div></div><div class="row2"><div><input id="newCant" placeholder="Cant"></div><div><input id="newPrecio" type="number" placeholder="Precio"></div></div><button onclick="addPerfil()" style="background:#22c55e;padding:6px">+ AGREGAR PERFIL A <span id="addRefTxt">744</span></button><button onclick="delPerfil()" style="background:#ef4444;color:#fff;padding:6px">- ELIMINAR ULTIMO</button></div>
+<div style="margin-top:6px;border-top:1px dashed #facc15;padding-top:4px"><b style="color:#facc15">Accesorios para <span id="accRefTxt">744</span></b><div style="display:flex;gap:4px;margin:2px 0;font-size:10px;color:#94a3b8"><span style="flex:1;min-width:90px">Nombre</span><span style="width:50px;text-align:center">Cant.</span><span style="width:55px;text-align:center">Precio</span><span style="width:55px;text-align:center">Total</span><span style="width:24px"></span></div><div id="accBox"></div><div class="row2"><input id="newAccNom" placeholder="Nombre acc"><input id="newAccCant" placeholder="Cant" type="number"><input id="newAccPrecio" placeholder="Precio" type="number"><button onclick="addAcc()" style="background:#facc15;color:#000;padding:4px 6px">+ Acc</button></div></div>
+</div>
+</details></div>
+<div class="c"><h3>Despiece <span id="totPiezas"></span></h3><div id="infoTop" style="color:#94a3b8"></div><table><thead><tr><th>Elemento</th><th>Formula</th><th>Medida</th><th>Cant.</th><th>Tiras</th><th>Total cm</th><th>Sobra</th></tr></thead><tbody id="tabla"></tbody></table></div>
+<div class="c"><h3>Planos - Con flechas y fijas - <span id="coloresPlanoTxt" style="color:#22c55e"></span></h3>
+<div style="background:#0a1220;padding:6px 8px;border-radius:8px;margin-bottom:6px;border:2px dashed #22c55e;display:flex;gap:6px;align-items:center"><b style="color:#facc15">PLANO:</b><select id="vista" onchange="calcular()" style="flex:1"><option value="Vista por Fuera">Ventana Vista por Fuera</option><option value="Vista por Dentro">Ventana Vista por Dentro</option></select></div>
+<div style="display:flex;gap:6px;margin-bottom:6px">
+<button type="button" id="tabPlanoVentana" onclick="setPlanoTab('ventana')" style="flex:1;margin:0;padding:6px;background:#38bdf8;color:#000;border-radius:6px;font-size:10.5px">Plano ventana</button>
+<button type="button" id="tabPlanoVidrio" onclick="setPlanoTab('vidrio')" style="flex:1;margin:0;padding:6px;background:#1e293b;color:#94a3b8;border-radius:6px;font-size:10.5px">Plano vidrios</button>
+</div>
+<div id="panelPlanoVentana">
+<canvas id="plano" style="width:100%;height:auto;display:block"></canvas>
+<p id="planoTxt" style="text-align:center;color:#94a3b8;margin:4px 0 0 0;font-size:11px"></p>
+</div>
+<div id="panelPlanoVidrio" style="display:none">
+<canvas id="planoVidrio" style="width:100%;height:auto;display:block"></canvas>
+</div>
+</div>
+<div class="c"><h3>Costo de Material</h3><div id="costos"></div><div style="background:#0f2744;padding:8px 10px;border-radius:10px;color:#e2e8f0"><b style="color:#38bdf8">COSTO TOTAL DE LA VENTANA: <span id="totalExacto" style="color:#fff">$0</span></b> <span style="color:#94a3b8">| c/desp: <span id="totalDesp">$0</span> | Barras: <span id="totalBarras" class="cantAzul">0</span> | Retal: <span id="totalSobra">0</span> cm | Empaque: <span id="totalEmpaque" style="color:#38bdf8">0 ml</span></span>
+<div id="desgloseCosto" style="margin-top:6px;border-top:1px dashed #38bdf8;padding-top:4px"></div>
+<div style="margin-top:6px;border-top:1px dashed #22c55e;padding-top:4px;color:#e2e8f0">MANO OBRA: <span id="totalMano2" style="color:#facc15">$0</span> (<span id="m2Total2">0</span> m² x $<span id="manoValTxt">0</span>)<br>CHAPAS: <span id="chapasTotTxt" style="color:#facc15">0</span><br><b style="font-size:13px">COSTO TOTAL (c/desp): <span id="totalConMano" style="color:#fff">$0</span></b></div>
+<div style="margin-top:6px;border-top:1px dashed #facc15;padding-top:4px;color:#e2e8f0">PRECIO VENTA (m²): <span id="totalVenta" style="color:#22c55e">$0</span> (<span id="m2Total3">0</span> m² x $<span id="ventaValTxt">0</span>)<br>% Esperado: <span id="pctEspTxt" style="color:#facc15">0%</span><br><span style="color:#94a3b8">Ganancia esperada s/ costo total:</span> <span id="ganEspExacto" style="color:#facc15">$0</span> | <span style="color:#94a3b8">s/ c/desp:</span> <span id="ganEspDesp" style="color:#facc15">$0</span><br><span style="color:#94a3b8">Ganancia real (venta m² − costo total):</span> <b id="ganRealExacto" style="color:#22c55e">$0</b><br><span style="color:#94a3b8">Ganancia real (venta m² − c/desp):</span> <b id="gananciaReal" style="color:#22c55e">$0</b> <span id="pctRealTxt" style="color:#94a3b8;font-size:11px"></span></div>
+<div style="margin-top:6px;border-top:2px solid #38bdf8;padding-top:6px"><b style="color:#38bdf8">COTIZACIÓN 1 — Costo total + % esperado:</b><br><span style="color:#94a3b8">Costo total + <span id="pctCot1">0</span>% =</span> <b id="cotiz1" style="color:#fff;font-size:13px">$0</b><br><span style="color:#94a3b8">Costo c/desp + % =</span> <b id="cotiz1Desp" style="color:#facc15">$0</b></div>
+<div style="margin-top:4px;border-top:1px dashed #22c55e;padding-top:4px"><b style="color:#22c55e">COTIZACIÓN 2 — Por metro cuadrado (precio venta):</b><br><span style="color:#94a3b8">Total por m² =</span> <b id="cotiz2" style="color:#fff;font-size:13px">$0</b><br><span style="color:#94a3b8">− Costo total &#x2192; ganancia:</span> <b id="cotiz2GanExacto" style="color:#22c55e">$0</b><br><span style="color:#94a3b8">− Costo c/desp &#x2192; ganancia:</span> <b id="cotiz2GanDesp" style="color:#22c55e">$0</b></div></div></div>
+<div class="c" id="planosProyectoBox" style="display:none"><h3>&#x1F4D0; Planos del proyecto <button onclick="renderPlanosProyecto()" style="width:auto;padding:3px 10px;background:#38bdf8;display:inline;margin-left:8px;font-size:10px">Actualizar planos</button> <button onclick="abrirVentanaPlanos()" style="width:auto;padding:3px 10px;background:#a78bfa;color:#000;display:inline;margin-left:6px;font-size:10px">&#x2197; Ventana solo planos</button></h3>
+<p style="color:#94a3b8;font-size:10.5px;margin:2px 0 8px">Vista detallada de todas las ventanas del proyecto (medidas, naves, fijas, flechas, por fuera, chapas y referencia).</p>
+<div id="planosGaleria"></div>
+</div>
+<script>
+let baseDefault={
+"744":[{el:"Cabezal",form:"A",cant:"1",precio:80000},{el:"Sillar",form:"A",cant:"1",precio:20000},{el:"Jamba",form:"H-1",cant:"2",precio:50000},{el:"Traslape",form:"H-2.30",cant:"2",precio:42000},{el:"Enganche",form:"H-2.30",cant:"2",precio:68000},{el:"Zócalo inferior",form:"(A+2)/3",cant:"3",precio:35000},{el:"Zócalo superior",form:"(A+2)/3",cant:"3",precio:35000},{el:"Vidrio alto",form:"H-9",cant:"3",precio:0},{el:"Vidrio ancho",form:"(A-16.10)/3",cant:"3",precio:0},{el:"Empaque",form:"perimetroVidrio",cant:"N",precio:8000}],
+"8025":[{el:"Cabezal 8025",form:"A",cant:"1",precio:95000},{el:"Sillar 8025",form:"A",cant:"1",precio:30000},{el:"Jamba 8025",form:"H-1",cant:"2",precio:65000},{el:"Traslape 8025",form:"H-3",cant:"2",precio:55000},{el:"Enganche 8025",form:"H-3",cant:"2",precio:78000},{el:"Zócalo inferior 8025",form:"(A+2)/2",cant:"2",precio:42000},{el:"Zócalo superior 8025",form:"(A+2)/2",cant:"2",precio:42000},{el:"Vidrio alto",form:"H-10",cant:"2",precio:0},{el:"Vidrio ancho",form:"(A-10)/2",cant:"2",precio:0},{el:"Empaque",form:"perimetroVidrio",cant:"N",precio:8000}],
+"5020":[{el:"Cabezal 5020",form:"A",cant:"1",precio:85000},{el:"Sillar 5020",form:"A",cant:"1",precio:25000},{el:"Jamba 5020",form:"H",cant:"2",precio:60000},{el:"Traslape 5020",form:"H-2.5",cant:"2",precio:48000},{el:"Enganche 5020",form:"H-2.5",cant:"2",precio:70000},{el:"Zócalo 5020",form:"(A-5)/2",cant:"4",precio:38000},{el:"Vidrio alto",form:"H-8",cant:"2",precio:0},{el:"Vidrio ancho",form:"(A-12)/2",cant:"2",precio:0},{el:"Empaque",form:"perimetroVidrio",cant:"N",precio:8000}],
+"7038":[{el:"Cabezal 7038",form:"A",cant:"1",precio:110000},{el:"Sillar 7038",form:"A",cant:"1",precio:35000},{el:"Jamba 7038",form:"H-0.5",cant:"2",precio:70000},{el:"Traslape 7038",form:"H-2",cant:"4",precio:60000},{el:"Enganche 7038",form:"H-2",cant:"4",precio:85000},{el:"Zócalo 7038",form:"(A+2)/4",cant:"8",precio:40000},{el:"Vidrio alto",form:"H-9.5",cant:"4",precio:0},{el:"Vidrio ancho",form:"(A-20)/4",cant:"4",precio:0},{el:"Empaque",form:"perimetroVidrio",cant:"N",precio:8000}]
+};
+let horizDefault={
+"744":{"2":{"2":"(A+2)/2","3":"(A+2)/3","4":"(A+2)/4","5":"(A+2)/5","6":"(A+2)/6"},"3":{"2":"(A+2)/2","3":"(A+3)/3","4":"(A+4)/4","5":"(A+5)/5","6":"(A+6)/6"}},
+"8025":{"2":{"2":"(A+2)/2","3":"(A+5)/3","4":"(A+6)/4","5":"(A+8)/5","6":"(A+10)/6"},"3":{"2":"(A+2)/2","3":"(A+2)/3","4":"(A+3)/4","5":"(A+4)/5","6":"(A+5)/6"}},
+"5020":{"2":{"2":"(A-5)/2","3":"(A-8)/3","4":"(A-10)/4","5":"(A-12)/5","6":"(A-15)/6"},"3":{"2":"(A-5)/2","3":"(A-10)/3","4":"(A-12)/4","5":"(A-14)/5","6":"(A-18)/6"}},
+"7038":{"2":{"2":"(A-10)/2","3":"(A-15)/3","4":"(A-20)/4","5":"(A-25)/5","6":"(A-30)/6"},"3":{"2":"(A-12)/2","3":"(A-18)/3","4":"(A-22)/4","5":"(A-28)/5","6":"(A-32)/6"}}
+};
+let preciosDefault={
+"744":{"2":[80000,20000,50000,42000,68000,35000,35000,0,0,8000],"3":[90000,30000,55000,47000,73000,40000,40000,0,0,8000]},
+"8025":{"2":[95000,30000,65000,55000,78000,42000,42000,0,0,8000],"3":[105000,40000,70000,60000,85000,47000,47000,0,0,8000]},
+"5020":{"2":[85000,25000,60000,48000,70000,38000,0,0,8000],"3":[95000,35000,65000,53000,75000,43000,0,0,8000]},
+"7038":{"2":[110000,35000,70000,60000,85000,40000,0,0,8000],"3":[120000,45000,75000,65000,90000,45000,0,0,8000]}
+};
+let alfDefault={
+"744":{"2":{"f":"A","c":"1","p":30000},"3":{"f":"A+5","c":"1","p":35000}},
+"8025":{"2":{"f":"A","c":"1","p":32000},"3":{"f":"A+6","c":"1","p":38000}},
+"5020":{"2":{"f":"A","c":"1","p":28000},"3":{"f":"A+4","c":"1","p":33000}},
+"7038":{"2":{"f":"A","c":"1","p":35000},"3":{"f":"A+8","c":"1","p":42000}}
+};
+let manoDefault={"744":{"2":45000,"3":50000},"8025":{"2":48000,"3":55000},"5020":{"2":42000,"3":47000},"7038":{"2":55000,"3":60000}};
+let ventaDefault={"744":{"precioM2":180000,"pct":30},"8025":{"precioM2":200000,"pct":30},"5020":{"precioM2":170000,"pct":30},"7038":{"precioM2":220000,"pct":30}};
+let sillar7038Tipo=localStorage.getItem('sillar7038TipoV5')||'empotrar';
+let sillar7038Desc={"empotrar":{"traslape":2,"enganche":2,"traslapeFijo":1.5,"engancheFijo":1.5},"sobreponer":{"traslape":1,"enganche":1,"traslapeFijo":1,"engancheFijo":1}};
+let fijo7038Config=JSON.parse(localStorage.getItem('fijo7038ConfigV7')||'{"enganche":{"form":"H-1.5","cant":"1","precio":85000},"traslape":{"form":"H-1.5","cant":"1","precio":60000}}');
+let gradosJambaConfig=JSON.parse(localStorage.getItem('gradosJambaV9')||'{"744":"0","8025":"0","5020":"0","7038":"0"}');
+let anchoGuiasConfig=JSON.parse(localStorage.getItem('anchoGuiasConfigV1')||'{"valor":0,"descontar":"no"}');
+function defaultDEForm(){let r=(document.getElementById('ref')?document.getElementById('ref').value:'744');if(r==='8025')return '(A-10)/2 + 0.7';if(r==='5020')return '(A-12)/2 + 0.7';if(r==='7038')return '(A-20)/4 + 0.7';return '(A-16.10)/3 + 0.7';}
+let extraNaveForms=JSON.parse(localStorage.getItem('extraNaveFormsV1')||'{"vidrioAnchoDobleEng":{"form":"(A-16.10)/3 + 0.7","cant":"1"},"altoFijoPorFuera":{"form":"H+2","cant":"1"},"anchoFijoPorFuera":{"form":"(A-16.10)/3 + 1","cant":"1"}}');
+let teCantConfig=JSON.parse(localStorage.getItem('teCantConfigV1')||'{}');
+function defaultTE(rieles,N){N=parseInt(N)||3;let ri=String(rieles);if(ri==='3')return{t:2,e:Math.max(0,2*N-2)};if(N%2===0)return{t:N,e:N};return{t:2,e:Math.max(0,2*N-2)};}
+function getTECant(r,rieles,N){N=String(parseInt(N)||3);rieles=String(rieles);if(!teCantConfig[r])teCantConfig[r]={};if(!teCantConfig[r][rieles])teCantConfig[r][rieles]={};if(!teCantConfig[r][rieles][N]){let d=defaultTE(rieles,N);teCantConfig[r][rieles][N]={t:d.t,e:d.e};}return teCantConfig[r][rieles][N];}
+function setTECant(r,rieles,N,t,e){N=String(parseInt(N)||3);rieles=String(rieles);if(!teCantConfig[r])teCantConfig[r]={};if(!teCantConfig[r][rieles])teCantConfig[r][rieles]={};teCantConfig[r][rieles][N]={t:parseInt(t)||0,e:parseInt(e)||0};save();calcular();}
+let current=JSON.parse(localStorage.getItem('myConfigV10')||JSON.stringify(baseDefault));
+Object.keys(current).forEach(refKey=>{if(!current[refKey].some(o=>o.el.toLowerCase().includes('empaque'))){current[refKey].push({el:"Empaque",form:"perimetroVidrio",cant:"N",precio:8000});} if(!gradosJambaConfig[refKey]) gradosJambaConfig[refKey]="0";});
+let horizForms=JSON.parse(localStorage.getItem('horizV17')||JSON.stringify(horizDefault));
+let preciosRiel=JSON.parse(localStorage.getItem('preciosV18')||JSON.stringify(preciosDefault));
+Object.keys(preciosRiel).forEach(rk=>{["2","3"].forEach(ri=>{if(preciosRiel[rk][ri]&&preciosRiel[rk][ri].length==9)preciosRiel[rk][ri].push(8000);});});
+let alfConfig=JSON.parse(localStorage.getItem('alfConfigV19')||JSON.stringify(alfDefault));
+let manoConfig=JSON.parse(localStorage.getItem('manoV20')||JSON.stringify(manoDefault));
+let ventaConfig=JSON.parse(localStorage.getItem('ventaConfigV1')||JSON.stringify(ventaDefault));
+let accDefaultItems=[{"n":"Tornillos","c":"0","p":0},{"n":"Chapa","c":"0","p":0},{"n":"Guías superiores","c":"0","p":0},{"n":"Guías inferiores","c":"0","p":0},{"n":"Rodachinas","c":"0","p":0},{"n":"Felpa","c":"0","p":0},{"n":"Empaque","c":"0","p":0}];
+let _accSeed=[{"n":"Tornillos","c":"0","p":0},{"n":"Chapa","c":"0","p":0},{"n":"Guías superiores","c":"0","p":0},{"n":"Guías inferiores","c":"0","p":0},{"n":"Rodachinas","c":"0","p":0},{"n":"Felpa","c":"0","p":0},{"n":"Empaque","c":"0","p":0}];
+let acc=JSON.parse(localStorage.getItem('accV10')||JSON.stringify({"744":JSON.parse(JSON.stringify(_accSeed)),"8025":JSON.parse(JSON.stringify(_accSeed)),"5020":JSON.parse(JSON.stringify(_accSeed)),"7038":JSON.parse(JSON.stringify(_accSeed))}));
+(function ensureAccDefaults(){Object.keys(current).forEach(function(rk){if(!acc[rk])acc[rk]=JSON.parse(JSON.stringify(accDefaultItems));let names=acc[rk].map(function(a){return (a.n||'').toLowerCase();});[{"n":"Guías superiores","c":"0","p":0},{"n":"Guías inferiores","c":"0","p":0},{"n":"Rodachinas","c":"0","p":0},{"n":"Felpa","c":"0","p":0},{"n":"Empaque","c":"0","p":0},{"n":"Tornillos","c":"0","p":0},{"n":"Chapa","c":"0","p":0}].forEach(function(it){if(names.indexOf(it.n.toLowerCase())<0)acc[rk].push({n:it.n,c:it.c,p:it.p});});acc[rk].forEach(function(a){if(a.p===undefined||a.p===null)a.p=0;});});})();
+function tornillosPorRef(r,N,cantV){N=parseInt(N)||3;cantV=parseInt(cantV)||1;let marco=4,porNave=4;let k=(r+'').toLowerCase();if(k.indexOf('8025')>=0||k.indexOf('8023')>=0){marco=8;porNave=4;}else if(k.indexOf('7038')>=0){marco=8;porNave=8;}else if(k.indexOf('5020')>=0){marco=4;porNave=4;}else{marco=4;porNave=4;}return (marco+porNave*N)*cantV;}
+
+let coloresV=JSON.parse(localStorage.getItem('colV8')||'["Negro","Blanco pintura","Blanco mate","Champaña","Madera","Natural"]');
+let coloresVid=JSON.parse(localStorage.getItem('colVid8')||'["Transparente","Bronce","Gris","Azul","Verde"]');
+let vidrioConfig=JSON.parse(localStorage.getItem('vidrioConfigV1')||JSON.stringify({
+"744":{"precioM2":45000,"grosor":"4mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]},
+"8025":{"precioM2":48000,"grosor":"5mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]},
+"5020":{"precioM2":42000,"grosor":"4mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]},
+"7038":{"precioM2":55000,"grosor":"6mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]}
+}));
+let isLocked=true;
+function save(){localStorage.setItem('myConfigV10',JSON.stringify(current));localStorage.setItem('horizV17',JSON.stringify(horizForms));localStorage.setItem('preciosV18',JSON.stringify(preciosRiel));localStorage.setItem('alfConfigV19',JSON.stringify(alfConfig));localStorage.setItem('manoV20',JSON.stringify(manoConfig));localStorage.setItem('ventaConfigV1',JSON.stringify(ventaConfig));localStorage.setItem('accV10',JSON.stringify(acc));localStorage.setItem('colV8',JSON.stringify(coloresV));localStorage.setItem('colVid8',JSON.stringify(coloresVid));localStorage.setItem('vidrioConfigV1',JSON.stringify(vidrioConfig));localStorage.setItem('fijo7038ConfigV7',JSON.stringify(fijo7038Config));localStorage.setItem('gradosJambaV9',JSON.stringify(gradosJambaConfig));localStorage.setItem('extraNaveFormsV1',JSON.stringify(extraNaveForms));localStorage.setItem('teCantConfigV1',JSON.stringify(teCantConfig));localStorage.setItem('anchoGuiasConfigV1',JSON.stringify(anchoGuiasConfig));}
+function saveAnchoGuias(){
+  let val=parseFloat(document.getElementById('anchoGuiasInput').value)||0;
+  let desc=document.getElementById('descuentoGuiasSel').value;
+  anchoGuiasConfig={valor:val,descontar:desc};
+  save();
+  calcular();
+}
+function loadAnchoGuias(){
+  if(document.getElementById('anchoGuiasInput')) document.getElementById('anchoGuiasInput').value = anchoGuiasConfig.valor !== undefined ? anchoGuiasConfig.valor : 0;
+  if(document.getElementById('descuentoGuiasSel')) document.getElementById('descuentoGuiasSel').value = anchoGuiasConfig.descontar || 'no';
+}
+function saveSillar7038(){sillar7038Tipo=document.getElementById('sillarEmp').checked?'empotrar':'sobreponer'; localStorage.setItem('sillar7038TipoV5',sillar7038Tipo); renderCalib(); calcular();}
+function loadSillar7038(){if(sillar7038Tipo=='empotrar'){document.getElementById('sillarEmp').checked=true;} else {document.getElementById('sillarSobre').checked=true;}}
+function esPerfilRieles(n){let l=n.toLowerCase();return l.includes('cabezal')||l.includes('sillar')||l.includes('jamba');}
+function loadAlf(){let r=ref.value, ri=rieles.value; if(!alfConfig[r])alfConfig[r]={"2":{"f":"A","c":"1","p":30000},"3":{"f":"A+5","c":"1","p":35000}}; if(!alfConfig[r][ri])alfConfig[r][ri]={"f":"A","c":"1","p":30000}; alfForm.value=alfConfig[r][ri].f; alfCant.value=alfConfig[r][ri].c; alfPrecio.value=alfConfig[r][ri].p; document.getElementById('alfRefTxt').innerText=r+' '+ri+'R'; document.getElementById('alfRefRielTxt').innerText=r+' '+ri+'R'; document.getElementById('alfRefRielPrecioTxt').innerText=r+' '+ri+'R';}
+function saveAlf(){let r=ref.value, ri=rieles.value; alfConfig[r][ri].f=alfForm.value; alfConfig[r][ri].c=alfCant.value; save();calcular();}
+function saveAlfPrecioRiel(v){let r=ref.value, ri=rieles.value; alfConfig[r][ri].p=parseFloat(v)||0; save();calcular();}
+function loadMano(){let r=ref.value, ri=rieles.value; if(!manoConfig[r])manoConfig[r]={"2":45000,"3":50000}; if(!manoConfig[r][ri])manoConfig[r][ri]=45000; manoObraM2.value=manoConfig[r][ri]; document.getElementById('manoRefTxt').innerText=r+' '+ri+'R';}
+function saveMano(){let r=ref.value, ri=rieles.value; if(!manoConfig[r])manoConfig[r]={"2":45000,"3":50000}; manoConfig[r][ri]=parseFloat(manoObraM2.value)||0; save();calcular();}
+function loadVenta(){let r=ref.value; if(!ventaConfig[r])ventaConfig[r]={"precioM2":180000,"pct":30}; document.getElementById('precioVentaM2').value=ventaConfig[r].precioM2||0; document.getElementById('pctGanancia').value=ventaConfig[r].pct||0; document.getElementById('ventaRefTxt').innerText=r; document.getElementById('pctRefTxt').innerText=r;}
+function saveVenta(){let r=ref.value; if(!ventaConfig[r])ventaConfig[r]={"precioM2":180000,"pct":30}; ventaConfig[r].precioM2=parseFloat(document.getElementById('precioVentaM2').value)||0; ventaConfig[r].pct=parseFloat(document.getElementById('pctGanancia').value)||0; save();calcular();}
+function loadVidrio(){let r=ref.value; if(!vidrioConfig[r])vidrioConfig[r]={"precioM2":45000,"grosor":"4mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]}; document.getElementById('precioVidM2').value=vidrioConfig[r].precioM2; document.getElementById('grosorVid').value=vidrioConfig[r].grosor||'4mm'; document.getElementById('vidRefTxt').innerText=r; renderColors();}
+function saveVidrio(){let r=ref.value; if(!vidrioConfig[r])vidrioConfig[r]={"precioM2":45000,"grosor":"4mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]}; vidrioConfig[r].precioM2=parseFloat(document.getElementById('precioVidM2').value)||0; vidrioConfig[r].grosor=document.getElementById('grosorVid').value||'4mm'; save();calcular();}
+function evalF(f,A,H,N){A=Number(A)||0;H=Number(H)||0;N=Number(N)||0;try{if(f===undefined||f===null||f==='')return 0;let s=(''+f).trim();if(/perimetro|chapa/i.test(s))return s;s=s.replace(/,/g,'.').replace(/[·˙‧，]/g,'.');s=s.replace(/[＋]/g,'+').replace(/[－−]/g,'-').replace(/[×]/g,'*').replace(/[÷]/g,'/');s=s.replace(/[（]/g,'(').replace(/[）]/g,')');s=s.replace(/[\u00A0\u2000-\u200B\u202F\u205F\u3000]/g,'').replace(/\s+/g,'');let s1=s.replace(/A/gi,'__A__').replace(/H/gi,'__H__').replace(/N/gi,'__N__');s1=s1.replace(/__A__/g,'('+A+')').replace(/__H__/g,'('+H+')').replace(/__N__/g,'('+N+')');try{let v=Function('"use strict";return ('+s1+')')();if(typeof v==='number'&&isFinite(v))return v;}catch(e1){}try{let v2=Function('A','H','N','"use strict";return ('+s+')')(A,H,N);if(typeof v2==='number'&&isFinite(v2))return v2;}catch(e2){}return 0;}catch(e){return 0;}}
+function toggleLock(){isLocked=!isLocked;document.getElementById('calibBox').className=isLocked?'locked':'';document.getElementById('lockTxt').innerText=isLocked?'[BLOQUEADO]':'[DESBLOQUEADO]';let lb=document.getElementById('lockBtn');if(lb){if(isLocked){lb.innerText='\uD83D\uDD12 BLOQUEADO';lb.style.background='#ef4444';lb.style.color='#fff';}else{lb.innerText='\uD83D\uDD13 DESBLOQUEADO';lb.style.background='#22c55e';lb.style.color='#000';}}let lbf=document.getElementById('lockFabBtn');if(lbf){if(isLocked){lbf.innerText='\uD83D\uDD12';lbf.style.background='#ef4444';lbf.style.color='#fff';lbf.title='Bloqueado — pulsa para desbloquear';}else{lbf.innerText='\uD83D\uDD13';lbf.style.background='#22c55e';lbf.style.color='#000';lbf.title='Desbloqueado — pulsa para bloquear';}}try{calcular();}catch(e){}}
+function renderRefs(){let s=document.getElementById('ref');s.innerHTML='';Object.keys(current).forEach(k=>{let o=document.createElement('option');o.value=k;o.text=k;s.appendChild(o)});s.onchange=()=>{renderCalib();renderHorizForm();loadAlf();loadMano();loadVenta();loadVidrio();renderAcc();calcular();};renderColors();renderAcc();toggleLock();toggleLock();renderHorizForm();loadAlf();loadMano();loadVenta();loadVidrio();loadSillar7038();loadAnchoGuias();}
+function renderColors(){let cv=document.getElementById('colorV'),cvd=document.getElementById('colorVid');let curV=cv.value,curVid=cvd.value;cv.innerHTML='';cvd.innerHTML='';coloresV.forEach(c=>{let o=document.createElement('option');o.value=c;o.text=c;cv.appendChild(o)});let r=document.getElementById('ref').value;let cols=(vidrioConfig[r]&&vidrioConfig[r].colores)?vidrioConfig[r].colores:coloresVid;cols.forEach(c=>{let o=document.createElement('option');o.value=c;o.text=c;cvd.appendChild(o)});if(curV)cv.value=curV;if(curVid)cvd.value=curVid;if(!cv.value&&coloresV.length>0)cv.value=coloresV[0];if(!cvd.value&&cols.length>0)cvd.value=cols[0];}
+function addColorV(){let v=document.getElementById('newColorV').value.trim();if(!v)return;if(!coloresV.includes(v))coloresV.push(v);save();renderColors();document.getElementById('newColorV').value='';colorV.value=v;calcular();}
+function addColorVid(){let v=document.getElementById('newColorVid').value.trim();if(!v)return;let r=ref.value;if(!vidrioConfig[r])vidrioConfig[r]={"precioM2":45000,"grosor":"4mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]};if(!vidrioConfig[r].colores)vidrioConfig[r].colores=["Transparente","Bronce","Gris","Azul","Verde"];if(!vidrioConfig[r].colores.includes(v))vidrioConfig[r].colores.push(v);save();renderColors();document.getElementById('newColorVid').value='';colorVid.value=v;calcular();}
+function nuevaRef(){let n=prompt("Nombre referencia");if(!n)return;current[n]=JSON.parse(JSON.stringify(current[ref.value]));horizForms[n]=JSON.parse(JSON.stringify(horizForms[ref.value]));preciosRiel[n]={"2":current[n].map(x=>x.precio),"3":current[n].map(x=>Math.round(x.precio*1.15))};alfConfig[n]={"2":{"f":"A","c":"1","p":30000},"3":{"f":"A+5","c":"1","p":38000}};manoConfig[n]={"2":45000,"3":50000};ventaConfig[n]=JSON.parse(JSON.stringify(ventaConfig[ref.value]||{"precioM2":180000,"pct":30}));acc[n]=JSON.parse(JSON.stringify(acc[ref.value]||[]));gradosJambaConfig[n]=gradosJambaConfig[ref.value]||"0";vidrioConfig[n]=JSON.parse(JSON.stringify(vidrioConfig[ref.value]||{"precioM2":45000,"grosor":"4mm","colores":["Transparente","Bronce","Gris","Azul","Verde"]}));save();renderRefs();ref.value=n;renderCalib();renderHorizForm();loadAlf();loadMano();loadVenta();loadVidrio();renderAcc();calcular();}
+function updateNavesOptions(){
+  let ri=document.getElementById('rieles').value;
+  let sel=document.getElementById('naves');
+  let cur=parseInt(sel.value)||3;
+  let minN=(ri==='3')?3:2;
+  sel.innerHTML='';
+  for(let n=minN;n<=6;n++){
+    let o=document.createElement('option'); o.value=String(n); o.text=String(n);
+    if(n===cur||(cur<minN&&n===minN)) o.selected=true;
+    sel.appendChild(o);
+  }
+  if(cur<minN){ sel.value=String(minN); }
+}
+function setPlanoTab(t){
+  let pv=document.getElementById('panelPlanoVentana');
+  let pvid=document.getElementById('panelPlanoVidrio');
+  let b1=document.getElementById('tabPlanoVentana');
+  let b2=document.getElementById('tabPlanoVidrio');
+  if(t==='vidrio'){
+    if(pv)pv.style.display='none';
+    if(pvid)pvid.style.display='block';
+    if(b1){b1.style.background='#1e293b';b1.style.color='#94a3b8';}
+    if(b2){b2.style.background='#facc15';b2.style.color='#000';}
+  }else{
+    if(pv)pv.style.display='block';
+    if(pvid)pvid.style.display='none';
+    if(b1){b1.style.background='#38bdf8';b1.style.color='#000';}
+    if(b2){b2.style.background='#1e293b';b2.style.color='#94a3b8';}
+  }
+}
+function onRielesChange(){
+  updateNavesOptions();
+  genNaves();
+  renderHorizForm();loadAlf();loadMano();loadVenta();loadVidrio();saveCurrentItem();calcular();
+}
+function genNaves(){
+ let n=parseInt(document.getElementById('naves').value,10)||3,div=document.getElementById('navesCfg');div.innerHTML='';
+ for(let i=1;i<=n;i++){
+  let chapaChk=(i==1||i==n)?'checked':'';
+  let puedeDE=(n>=3&&i>1&&i<n);
+  let deHtml=puedeDE?`<label style="background:#1a1500;border:1px solid #facc15;padding:3px 5px;border-radius:4px;color:#fde68a"><input type="checkbox" id="dobleEng${i}" onchange="renderCalib();calcular()" style="width:auto"> Doble eng.</label>`:`<input type="checkbox" id="dobleEng${i}" style="display:none" disabled>`;
+  let posHtml='';
+  if(i===1||i===n){
+    let defPos=(i===1)?'Exterior':'Interior';
+    posHtml=`<select id="posNave${i}" onchange="calcular()" style="width:auto;min-width:88px;background:#0c1a2e;border:1px solid #38bdf8;color:#ffffff;padding:3px 5px;border-radius:4px;font-size:11px;font-weight:700"><option value="Exterior"${defPos==='Exterior'?' selected':''}>Exterior</option><option value="Interior"${defPos==='Interior'?' selected':''}>Interior</option></select>`;
+  } else {
+    posHtml=`<input type="hidden" id="posNave${i}" value="">`;
+  }
+  div.innerHTML+=`<div class="naveRow"><b style="min-width:50px">Nave ${i}</b><label><input type="checkbox" id="fija${i}" onchange="toggleFija(${i})" style="width:auto"> Fija</label><label style="background:#061a06;border:1px solid #22c55e;padding:3px 5px;border-radius:4px;color:#86efac"><input type="checkbox" id="chapa${i}" ${chapaChk} onchange="calcular()" style="width:auto"> Chapa</label><label style="background:#1a0a2a;border:1px solid #a78bfa;padding:3px 5px;border-radius:4px;color:#c4b5fd"><input type="checkbox" id="porFuera${i}" onchange="renderCalib();calcular()" style="width:auto"> Por fuera</label>${deHtml}${posHtml}<div id="abreBox${i}" style="flex:1"><select id="abre${i}" onchange="calcular()"><option value="Derecha">Derecha \u2192</option><option value="Izquierda">Izquierda \u2190</option><option value="Ambos">Ambos \u2194</option></select></div><span id="noAbre${i}" style="display:none;color:#f87171">Fija</span></div>`;
+ }
+ renderCalib(); calcular();
+}
+function toggleFija(i){let f=document.getElementById('fija'+i).checked;document.getElementById('abreBox'+i).style.display=f?'none':'block';document.getElementById('noAbre'+i).style.display=f?'block':'none';renderCalib();calcular();}
+function savePrecioRiel(idx,val,isRielDep){let r=ref.value, ri=rieles.value;if(!preciosRiel[r][ri])preciosRiel[r][ri]=current[r].map(o=>o.precio);preciosRiel[r][ri][idx]=parseFloat(val)||0;if(!isRielDep){if(!preciosRiel[r]["2"])preciosRiel[r]["2"]=current[r].map(o=>o.precio);if(!preciosRiel[r]["3"])preciosRiel[r]["3"]=current[r].map(o=>o.precio);preciosRiel[r]["2"][idx]=parseFloat(val)||0;preciosRiel[r]["3"][idx]=parseFloat(val)||0;}save();calcular();}
+function renderHorizForm(){let r=ref.value; if(!horizForms[r])horizForms[r]=JSON.parse(JSON.stringify(horizDefault[r]||horizDefault["744"]));["2","3"].forEach(function(ri){if(!horizForms[r][ri])horizForms[r][ri]=JSON.parse(JSON.stringify((horizDefault[r]||horizDefault["744"])[ri]||{}));for(let n=2;n<=6;n++){let k=String(n);if(horizForms[r][ri][k]===undefined||horizForms[r][ri][k]===null||horizForms[r][ri][k]===""){let d=(horizDefault[r]||horizDefault["744"]);horizForms[r][ri][k]=(d[ri]&&(d[ri][k]||d[ri][n]))||("(A)/"+k);}}});document.getElementById('refTxt').innerText=r;document.getElementById('addRefTxt').innerText=r;document.getElementById('accRefTxt').innerText=r;let html=''; html+='<div style="background:#0a1220;padding:6px;border-radius:6px;border:1px solid #38bdf8"><b>2 RIELES - '+r+'</b>';for(let n=2;n<=6;n++){let val=horizForms[r]["2"][String(n)]||horizForms[r]["2"][n]||'';html+=`<div style="display:flex;gap:4px;margin:2px 0"><span style="width:55px;color:#facc15">${n} naves</span><input value="${val}" onchange="horizForms['${r}']['2']['${n}']=this.value;horizForms['${r}']['2'][String(${n})]=this.value;save();saveCurrentItem();calcular()"></div>`;}html+='</div><div style="background:#0a1220;padding:6px;border-radius:6px;border:1px solid #facc15;margin-top:6px"><b>3 RIELES - '+r+'</b><div style="color:#94a3b8;font-size:10px;margin:2px 0">Mínimo 3 naves (no aplica 2 naves)</div>';for(let n=3;n<=6;n++){let val=horizForms[r]["3"][String(n)]||horizForms[r]["3"][n]||'';html+=`<div style="display:flex;gap:4px;margin:2px 0"><span style="width:55px;color:#facc15">${n} naves</span><input value="${val}" onchange="horizForms['${r}']['3']['${n}']=this.value;horizForms['${r}']['3'][String(${n})]=this.value;save();saveCurrentItem();calcular()"></div>`;}html+='</div>'; document.getElementById('horizCalib').innerHTML=html;}
+function renderCalib(){
+ let r=ref.value;
+ let html='';
+ let fijasCount=0;
+ let N=parseInt(document.getElementById('naves').value)||3;
+ for(let i=1;i<=N;i++){ if(document.getElementById('fija'+i)?.checked) fijasCount++; }
+ current[r].forEach((o,i)=>{
+   if(o.el.toLowerCase().includes('empaque')) return;
+   html+=`<div style="display:flex;gap:4px;margin:2px 0"><span style="width:20px">${i}</span><input value="${o.el}" style="flex:2" onchange="current['${r}'][${i}].el=this.value;save();saveCurrentItem();calcular()"><input value="${o.form}" style="flex:1" onchange="current['${r}'][${i}].form=this.value;save();saveCurrentItem();calcular()"><input value="${o.cant}" style="width:50px" onchange="current['${r}'][${i}].cant=this.value;save();saveCurrentItem();calcular()"></div>`;
+   if(o.el.toLowerCase().includes('jamba')){
+     if(!gradosJambaConfig[r]) gradosJambaConfig[r]="0";
+     html+=`<div style="display:flex;gap:4px;margin:2px 0;background:#061a2a;border:1px dashed #38bdf8;padding:4px;border-radius:6px"><span style="width:20px;color:#facc15">°</span><input value="Grados de la jamba (abajo) ${r}" style="flex:2;background:#061a2a;border-color:#facc15;color:#facc15" readonly><input value="${gradosJambaConfig[r]}" style="flex:1;border-color:#facc15" onchange="gradosJambaConfig['${r}']=this.value;save();saveCurrentItem();calcular()" placeholder="Ej: 3°"><input value="°" style="width:50px;border-color:#facc15" readonly></div>`;
+   }
+ });
+ if(r=='7038' && sillar7038Tipo=='empotrar' && fijasCount>0){
+   html+=`<div style="background:#0f1f0a;border:1px dashed #22c55e;padding:6px;border-radius:8px;margin:6px 0"><b style="color:#22c55e">FIJOS 7038 EMPOTRAR - ${fijasCount} fija(s)</b>`;
+   html+=`<div style="display:flex;gap:4px;margin:4px 0"><span style="width:20px;color:#22c55e">9</span><input value="Enganche fijo 7038" style="flex:2;background:#0f1f0a;border-color:#22c55e" readonly><input value="${fijo7038Config.enganche.form}" style="flex:1;border-color:#22c55e" onchange="fijo7038Config.enganche.form=this.value;save();saveCurrentItem();calcular()"><input value="${fijo7038Config.enganche.cant}" style="width:50px;border-color:#22c55e" onchange="fijo7038Config.enganche.cant=this.value;save();saveCurrentItem();calcular()"></div>`;
+   html+=`<div style="display:flex;gap:4px;margin:4px 0"><span style="width:20px;color:#22c55e">10</span><input value="Traslape fijo 7038" style="flex:2;background:#0f1f0a;border-color:#22c55e" readonly><input value="${fijo7038Config.traslape.form}" style="flex:1;border-color:#22c55e" onchange="fijo7038Config.traslape.form=this.value;save();saveCurrentItem();calcular()"><input value="${fijo7038Config.traslape.cant}" style="width:50px;border-color:#22c55e" onchange="fijo7038Config.traslape.cant=this.value;save();saveCurrentItem();calcular()"></div>`;
+   html+=`</div>`;
+ }
+ let porFueraCount=0,dobleEngCount=0;
+ for(let i=1;i<=N;i++){ if(document.getElementById('porFuera'+i)?.checked) porFueraCount++; if(document.getElementById('dobleEng'+i)?.checked) dobleEngCount++; }
+ if(dobleEngCount>0){
+   if(!extraNaveForms.vidrioAnchoDobleEng) extraNaveForms.vidrioAnchoDobleEng={form:defaultDEForm(),cant:"1"};
+   if(!extraNaveForms.vidrioAnchoDobleEng.form) extraNaveForms.vidrioAnchoDobleEng.form=defaultDEForm();
+   let deFormVal=(r==='7038' && extraNaveForms.vidrioAnchoDobleEng.form.includes('+ 0.7')) ? '(A-20)/4' : extraNaveForms.vidrioAnchoDobleEng.form;
+   extraNaveForms.vidrioAnchoDobleEng.form=deFormVal;
+   html+=`<div style="background:#1a1500;border:1px dashed #facc15;padding:6px;border-radius:8px;margin:6px 0"><b style="color:#facc15">DOBLE ENGANCHE - ${dobleEngCount} nave(s)</b><div style="color:#94a3b8;font-size:10px;margin:2px 0">En Ref 7038 Monumental los vidrios quedan a la misma medida. En otras referencias puedes editar la fórmula si requiere diferencia.</div>`;
+   html+=`<div style="display:flex;gap:4px;margin:4px 0"><span style="width:20px;color:#facc15">DE</span><input value="Vidrio ancho doble enganche" style="flex:2;background:#1a1500;border-color:#facc15" readonly><input value="${deFormVal}" style="flex:1;border-color:#facc15" onchange="extraNaveForms.vidrioAnchoDobleEng.form=this.value;save();saveCurrentItem();calcular()"><input value="${extraNaveForms.vidrioAnchoDobleEng.cant}" style="width:50px;border-color:#facc15" onchange="extraNaveForms.vidrioAnchoDobleEng.cant=this.value;save();saveCurrentItem();calcular()"></div>`;
+   html+=`</div>`;
+ }
+ if(porFueraCount>0){
+   if(!extraNaveForms.altoFijoPorFuera) extraNaveForms.altoFijoPorFuera={form:"H+2",cant:"1"};
+   if(!extraNaveForms.anchoFijoPorFuera) extraNaveForms.anchoFijoPorFuera={form:"(A-16.10)/3 + 1",cant:"1"};
+   html+=`<div style="background:#1a0a2a;border:1px dashed #a78bfa;padding:6px;border-radius:8px;margin:6px 0"><b style="color:#a78bfa">POR FUERA - ${porFueraCount} nave(s)</b>`;
+   html+=`<div style="display:flex;gap:4px;margin:4px 0"><span style="width:20px;color:#a78bfa">PF</span><input value="Alto fijo por fuera" style="flex:2;background:#1a0a2a;border-color:#a78bfa" readonly><input value="${extraNaveForms.altoFijoPorFuera.form}" style="flex:1;border-color:#a78bfa" onchange="extraNaveForms.altoFijoPorFuera.form=this.value;save();saveCurrentItem();calcular()"></div>`;
+   html+=`<div style="display:flex;gap:4px;margin:4px 0"><span style="width:20px;color:#a78bfa">PF</span><input value="Ancho fijo por fuera" style="flex:2;background:#1a0a2a;border-color:#a78bfa" readonly><input value="${extraNaveForms.anchoFijoPorFuera.form}" style="flex:1;border-color:#a78bfa" onchange="extraNaveForms.anchoFijoPorFuera.form=this.value;save();saveCurrentItem();calcular()"></div>`;
+   html+=`</div>`;
+ }
+ let riCal=document.getElementById('rieles')?.value||'2';
+ let te=getTECant(r,riCal,N);
+ html+=`<div style="background:#061a2a;border:1px dashed #38bdf8;padding:6px;border-radius:8px;margin:6px 0"><b style="color:#38bdf8">TRASLAPE / ENGANCHE — ${r} · ${riCal}R · ${N} naves</b>`;
+ html+=`<div style="display:flex;gap:4px;margin:4px 0;align-items:center"><span style="width:90px;color:#facc15">Traslapes</span><input type="number" value="${te.t}" style="width:70px;border-color:#38bdf8" onchange="setTECant('${r}','${riCal}',${N},this.value,getTECant('${r}','${riCal}',${N}).e)"><span style="color:#94a3b8;font-size:11px">cant. por ventana</span></div>`;
+ html+=`<div style="display:flex;gap:4px;margin:4px 0;align-items:center"><span style="width:90px;color:#facc15">Enganches</span><input type="number" value="${te.e}" style="width:70px;border-color:#38bdf8" onchange="setTECant('${r}','${riCal}',${N},getTECant('${r}','${riCal}',${N}).t,this.value)"><span style="color:#94a3b8;font-size:11px">cant. por ventana</span></div>`;
+ html+=`<div style="font-size:10px;color:#64748b;margin-top:4px">Regla base: 3 naves \u2192 2 traslapes + 4 enganches · 4 naves 2R \u2192 4+4 · 4 naves 3R \u2192 2 traslapes + 6 enganches. Editable y se guarda por referencia + rieles + naves.</div></div>`;
+ let empIdx=current[r].findIndex(o=>o.el.toLowerCase().includes('empaque'));
+ if(empIdx>=0){
+   let o=current[r][empIdx];
+   html+=`<div style="display:flex;gap:4px;margin:2px 0"><span style="width:20px">8</span><input value="${o.el}" style="flex:2" onchange="current['${r}'][${empIdx}].el=this.value;save();saveCurrentItem();calcular()"><input value="${o.form}" style="flex:1" onchange="current['${r}'][${empIdx}].form=this.value;save();saveCurrentItem();calcular()"><input value="${o.cant}" style="width:50px" onchange="current['${r}'][${empIdx}].cant=this.value;save();saveCurrentItem();calcular()"></div>`;
+ }
+ document.getElementById('calib').innerHTML=html;
+}
+function addPerfil(){if(isLocked){alert('Desbloquea primero');return;}let r=ref.value;let el=document.getElementById('newEl').value.trim(),f=document.getElementById('newForm').value.trim(),c=document.getElementById('newCant').value.trim(),p=parseFloat(document.getElementById('newPrecio').value)||0;if(!el||!f||!c)return alert('Llena datos');current[r].push({el:el,form:f,cant:c,precio:p});if(!preciosRiel[r]["2"])preciosRiel[r]["2"]=[];if(!preciosRiel[r]["3"])preciosRiel[r]["3"]=[];preciosRiel[r]["2"].push(p);preciosRiel[r]["3"].push(Math.round(p*1.15));save();renderCalib();document.getElementById('newEl').value='';document.getElementById('newForm').value='';document.getElementById('newCant').value='';document.getElementById('newPrecio').value='';calcular();}
+function delPerfil(){if(isLocked){alert('Desbloquea primero');return;}let r=ref.value;if(current[r].length<=1)return;if(!confirm('Eliminar ultimo?'))return;current[r].pop();preciosRiel[r]["2"].pop();preciosRiel[r]["3"].pop();save();renderCalib();calcular();}
+function renderAcc(){let r=ref.value;if(!acc[r])acc[r]=[];let html='';let sumaAcc=0;acc[r].forEach((a,i)=>{if(a.p===undefined||a.p===null)a.p=0;let cant=parseFloat(a.c)||0;let pu=parseFloat(a.p)||0;let tot=cant*pu;sumaAcc+=tot;let nom=(a.n==null?'':String(a.n)).replace(/"/g,'&quot;');html+=`<div style="display:flex;gap:4px;margin:2px 0;align-items:center;width:100%"><input value="${nom}" style="flex:1;min-width:90px;width:0" onchange="acc['${r}'][${i}].n=this.value;save();saveCurrentItem();calcular()" title="Nombre"><input value="${a.c}" type="number" style="width:50px;flex-shrink:0" onchange="acc['${r}'][${i}].c=this.value;save();saveCurrentItem();calcular()" title="Cantidad"><input value="${a.p}" type="number" style="width:55px;flex-shrink:0" onchange="acc['${r}'][${i}].p=parseFloat(this.value)||0;save();saveCurrentItem();calcular()" title="Precio unitario"><span style="width:55px;flex-shrink:0;text-align:right;color:#22c55e;font-weight:700;font-size:11px">$${tot.toFixed(0)}</span><button onclick="acc['${r}'].splice(${i},1);save();renderAcc();calcular()" style="width:24px;flex-shrink:0;background:#ef4444;padding:2px 0;height:22px;line-height:18px">x</button></div>`});html+=`<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:6px;padding-top:6px;border-top:1px dashed #facc15;font-size:12px"><span style="color:#94a3b8">Total accesorios:</span><b style="color:#22c55e">$${sumaAcc.toFixed(0)}</b></div>`;document.getElementById('accBox').innerHTML=html;}
+function addAcc(){if(isLocked){alert('Desbloquea primero');return;}let r=ref.value;let n=document.getElementById('newAccNom').value.trim(),c=document.getElementById('newAccCant').value.trim(),p=parseFloat(document.getElementById('newAccPrecio').value)||0;if(!n||!c)return;if(!acc[r])acc[r]=[];acc[r].push({n:n,c:c,p:p});save();renderAcc();document.getElementById('newAccNom').value='';document.getElementById('newAccCant').value='';document.getElementById('newAccPrecio').value='';calcular();}
+function getPlanoDataFromItem(it, vista){
+  let N=parseInt(it.naves)||3;
+  let fijas={},chapas={},abres={},porFuera={},dobleEng={},posNave={};
+  for(let i=1;i<=N;i++){
+    fijas[i]=!!(it.fijas&&it.fijas[i]);
+    chapas[i]=it.chapas?!!it.chapas[i]:(i===1||i===N);
+    abres[i]=(it.abres&&it.abres[i])||'Derecha';
+    porFuera[i]=!!(it.porFuera&&it.porFuera[i]);
+    dobleEng[i]=!!(it.dobleEng&&it.dobleEng[i]);
+    posNave[i]=(it.posNave&&it.posNave[i])||((i===1)?'Exterior':(i===N)?'Interior':'');
+  }
+  return {
+    N:N, A:parseFloat(it.A)||0, H:parseFloat(it.H)||0,
+    ref:it.ref||'?', rieles:it.rieles||'2',
+    colorV:it.colorV||'', colorVid:it.colorVid||'',
+    cant:parseInt(it.cantVent)||1, vista:vista||'Vista por Fuera',
+    fijas:fijas, chapas:chapas, abres:abres, porFuera:porFuera, dobleEng:dobleEng, posNave:posNave
+  };
+}
+function drawPlanoProfesional(ctx, cw, ch, d, forPdf){
+  let bg=forPdf?'#ffffff':'#0b172a';
+  let ink=forPdf?'#0f172a':'#e2e8f0';
+  let accent=forPdf?'#1d4ed8':'#2ea8ff';
+  let fijaC=forPdf?'#b91c1c':'#ef4444';
+  let chapaC=forPdf?'#15803d':'#22c55e';
+  let porFC=forPdf?'#6d28d9':'#a78bfa';
+  let flechaC=forPdf?'#a16207':'#facc15';
+  let muted=forPdf?'#64748b':'#94a3b8';
+  ctx.fillStyle=bg; ctx.fillRect(0,0,cw,ch);
+  let padL=55, padR=25, padT=45, padB=50;
+  let rw=cw-padL-padR, rh=ch-padT-padB;
+  ctx.fillStyle=ink; ctx.font='bold 16px sans-serif';
+  ctx.fillText('Ref. '+d.ref+'  ·  '+d.rieles+' Rieles  ·  '+d.N+' naves', padL, 18);
+  ctx.font='13px sans-serif'; ctx.fillStyle=muted;
+  ctx.fillText((d.vista||'')+'  ·  '+d.colorV+' / '+d.colorVid+'  ·  ×'+d.cant, padL, 32);
+  ctx.strokeStyle=ink; ctx.lineWidth=2.5; ctx.strokeRect(padL, padT, rw, rh);
+  ctx.fillStyle=accent; ctx.font='bold 14px sans-serif';
+  let medA=d.A+' cm';
+  let tw=ctx.measureText(medA).width;
+  ctx.fillText(medA, padL+(rw-tw)/2, padT-6);
+  ctx.strokeStyle=accent; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(padL, padT-3); ctx.lineTo(padL+rw, padT-3); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL, padT-6); ctx.lineTo(padL, padT); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(padL+rw, padT-6); ctx.lineTo(padL+rw, padT); ctx.stroke();
+  ctx.save();
+  ctx.translate(padL-14, padT+rh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle=accent; ctx.font='bold 12px sans-serif';
+  let medH=d.H+' cm';
+  let th=ctx.measureText(medH).width;
+  ctx.fillText(medH, -th/2, 0);
+  ctx.restore();
+  ctx.strokeStyle=accent; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(padL-3, padT); ctx.lineTo(padL-3, padT+rh); ctx.stroke();
+  let dw=rw/d.N;
+  for(let i=1;i<=d.N;i++){
+    let x0=padL+dw*(i-1);
+    let cx=x0+dw/2;
+    if(i<d.N){
+      ctx.setLineDash([5,3]); ctx.strokeStyle=accent; ctx.lineWidth=1.2;
+      ctx.beginPath(); ctx.moveTo(padL+dw*i, padT); ctx.lineTo(padL+dw*i, padT+rh); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    let fija=!!d.fijas[i], llevaChapa=!!d.chapas[i], porF=!!d.porFuera[i], dobE=!!(d.dobleEng&&d.dobleEng[i]);
+    let abre=d.abres[i]||'Derecha';
+    ctx.fillStyle=ink; ctx.font='bold 13px sans-serif';
+    let lab='Nave '+i; let lw=ctx.measureText(lab).width;
+    ctx.fillText(lab, cx-lw/2, padT+14);
+    ctx.fillStyle=muted; ctx.font='12px sans-serif';
+    let anN=(d.A/d.N).toFixed(1)+' cm';
+    let aw=ctx.measureText(anN).width;
+    ctx.fillText(anN, cx-aw/2, padT+rh-6);
+    if(fija){
+      ctx.strokeStyle=fijaC; ctx.lineWidth=3;
+      let m=Math.min(dw*0.25, rh*0.2);
+      ctx.beginPath(); ctx.moveTo(cx-m, padT+rh*0.3); ctx.lineTo(cx+m, padT+rh*0.6); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx+m, padT+rh*0.3); ctx.lineTo(cx-m, padT+rh*0.6); ctx.stroke();
+      ctx.fillStyle=fijaC; ctx.font='bold 12px sans-serif';
+      let ft='FIJA'; let ftw=ctx.measureText(ft).width;
+      ctx.fillText(ft, cx-ftw/2, padT+rh*0.7);
+      if(llevaChapa){ ctx.fillStyle=chapaC; ctx.font='bold 12px sans-serif'; let ct='CHAPA'; ctx.fillText(ct, cx-ctx.measureText(ct).width/2, padT+rh*0.8); }
+      if(porF){ ctx.fillStyle=porFC; ctx.font='bold 12px sans-serif'; let pt='POR FUERA'; ctx.fillText(pt, cx-ctx.measureText(pt).width/2, padT+rh*0.88); }
+      if(dobE){ ctx.fillStyle=flechaC; ctx.font='bold 12px sans-serif'; let de='DOBLE ENGANCHE'; ctx.fillText(de, cx-ctx.measureText(de).width/2, padT+rh*0.96); }
+      let pos=(d.posNave&&d.posNave[i])||'';
+      if(pos){ ctx.fillStyle=pos==='Exterior'?'#38bdf8':'#94a3b8'; ctx.font='bold 12px sans-serif'; let pt=pos.toUpperCase(); ctx.fillText(pt, cx-ctx.measureText(pt).width/2, padT+28); }
+    } else {
+      ctx.fillStyle=flechaC; ctx.font='bold 24px sans-serif';
+      let arrow=abre=='Derecha'?'\u2192':(abre=='Izquierda'?'\u2190':'\u2194');
+      let arw=ctx.measureText(arrow).width;
+      ctx.fillText(arrow, cx-arw/2, padT+rh*0.45);
+      ctx.fillStyle=ink; ctx.font='bold 13px sans-serif';
+      ctx.fillText(abre, cx-ctx.measureText(abre).width/2, padT+rh*0.58);
+      if(llevaChapa){ ctx.fillStyle=chapaC; ctx.font='bold 12px sans-serif'; let ct='CHAPA'; ctx.fillText(ct, cx-ctx.measureText(ct).width/2, padT+rh*0.72); }
+      else { ctx.fillStyle=muted; ctx.font='12px sans-serif'; let s='sin chapa'; ctx.fillText(s, cx-ctx.measureText(s).width/2, padT+rh*0.72); }
+      if(porF){ ctx.fillStyle=porFC; ctx.font='bold 12px sans-serif'; let pt='POR FUERA'; ctx.fillText(pt, cx-ctx.measureText(pt).width/2, padT+rh*0.84); }
+      if(dobE){ ctx.fillStyle=flechaC; ctx.font='bold 12px sans-serif'; let de='DOBLE ENGANCHE'; ctx.fillText(de, cx-ctx.measureText(de).width/2, padT+rh*0.94); }
+      let pos2=(d.posNave&&d.posNave[i])||'';
+      if(pos2){ ctx.fillStyle=pos2==='Exterior'?'#38bdf8':'#94a3b8'; ctx.font='bold 12px sans-serif'; let pt2=pos2.toUpperCase(); ctx.fillText(pt2, cx-ctx.measureText(pt2).width/2, padT+28); }
+    }
+  }
+  let chapasTot=0, fijasTot=0, porFTot=0, dobTot=0;
+  for(let i=1;i<=d.N;i++){ if(d.chapas[i]) chapasTot++; if(d.fijas[i]) fijasTot++; if(d.porFuera[i]) porFTot++; if(d.dobleEng&&d.dobleEng[i]) dobTot++; }
+  let m2=((d.A*d.H)/10000).toFixed(2);
+  ctx.fillStyle=flechaC; ctx.font='bold 13px sans-serif';
+  ctx.fillText((d.vista||'').toUpperCase()+'  ·  '+chapasTot+' CHAPA(S)  ·  '+fijasTot+' FIJA(S)'+(porFTot?'  ·  '+porFTot+' POR FUERA':'')+(dobTot?'  ·  '+dobTot+' DOBLE ENGANCHE':''), padL, ch-22);
+  ctx.fillStyle=muted; ctx.font='12px sans-serif';
+  ctx.fillText(d.A+' × '+d.H+' cm  ·  '+m2+' m²/vent  ·  Cant. '+d.cant, padL, ch-10);
+}
+function drawPlanoVidriosProfesional(ctx, cw, ch, d, forPdf){
+  let bg=forPdf?'#ffffff':'#0b172a';
+  let ink=forPdf?'#0f172a':'#e2e8f0';
+  let accent=forPdf?'#1d4ed8':'#38bdf8';
+  let deC=forPdf?'#a16207':'#facc15';
+  let muted=forPdf?'#64748b':'#94a3b8';
+  ctx.fillStyle=bg; ctx.fillRect(0,0,cw,ch);
+  ctx.fillStyle=ink; ctx.font='bold 16px sans-serif';
+  ctx.fillText('PLANO DE VIDRIOS — Ref. '+d.ref+' · '+d.rieles+'R · '+d.N+' naves', 14, 22);
+  ctx.font='13px sans-serif'; ctx.fillStyle=muted;
+  ctx.fillText('Color vidrio: '+d.colorVid+' · '+(vidrioConfig[d.ref]&&vidrioConfig[d.ref].grosor?vidrioConfig[d.ref].grosor:''), 14, 38);
+  let formAnchoBase='', formAltoBase='';
+  (current[d.ref]||[]).forEach(function(o){
+    let el=(o.el||'').toLowerCase();
+    if(el.includes('vidrio alto')&&!el.includes('doble')&&!el.includes('empaque')) formAltoBase=o.form;
+    if(el.includes('vidrio ancho')&&!el.includes('doble')&&!el.includes('empaque')) formAnchoBase=o.form;
+  });
+  let altoV=evalF(formAltoBase||'H-9',d.A,d.H,d.N)||0;
+  let anchoV=evalF(formAnchoBase||('(A)/'+d.N),d.A,d.H,d.N)||0;
+  if(!extraNaveForms.vidrioAnchoDobleEng) extraNaveForms.vidrioAnchoDobleEng={form:defaultDEForm(),cant:'1'};
+  if(!extraNaveForms.vidrioAnchoDobleEng.form) extraNaveForms.vidrioAnchoDobleEng.form=defaultDEForm();
+  let formDEUsar=(d.ref==='7038' && extraNaveForms.vidrioAnchoDobleEng.form.includes('+ 0.7')) ? '(A-20)/4' : extraNaveForms.vidrioAnchoDobleEng.form;
+  let anchoDE=evalF(formDEUsar,d.A,d.H,d.N)||anchoV;
+  let pad=16, areaT=50, areaH=ch-60;
+  let dwV=(cw-pad*2)/Math.max(d.N,1);
+  let maxAn=Math.max(anchoV,anchoDE,1), maxAl=Math.max(altoV,1);
+  let maxCellW=dwV-20, maxCellH=areaH-70;
+  let rawScale=Math.min(maxCellW/maxAn, maxCellH/maxAl);
+  for(let i=1;i<=d.N;i++){
+    let x0=pad+dwV*(i-1);
+    let cxv=x0+dwV/2;
+    let esDE=!!d.dobleEng[i];
+    let an=esDE?anchoDE:anchoV;
+    let rw=Math.max(10, an*rawScale), rh=Math.max(10, altoV*rawScale);
+    let rx=cxv-rw/2, ry=areaT+20+(maxCellH-rh)/2;
+    ctx.strokeStyle=esDE?deC:accent; ctx.lineWidth=2;
+    ctx.fillStyle=esDE?(forPdf?'rgba(161,98,7,0.08)':'rgba(250,204,21,0.08)'):(forPdf?'rgba(29,78,216,0.08)':'rgba(56,189,248,0.08)');
+    ctx.fillRect(rx,ry,rw,rh); ctx.strokeRect(rx,ry,rw,rh);
+    ctx.fillStyle=ink; ctx.font='bold 13px sans-serif';
+    let lab='Nave '+i; ctx.fillText(lab, cxv-ctx.measureText(lab).width/2, areaT+12);
+    ctx.fillStyle=forPdf?'#15803d':'#22c55e'; ctx.font='bold 13px sans-serif';
+    let tA='Alto: '+altoV.toFixed(2)+' cm'; ctx.fillText(tA, cxv-ctx.measureText(tA).width/2, ry+rh+14);
+    ctx.fillStyle=esDE?deC:accent; ctx.font='bold 13px sans-serif';
+    let tW='Ancho: '+an.toFixed(2)+' cm'; ctx.fillText(tW, cxv-ctx.measureText(tW).width/2, ry+rh+28);
+    if(esDE){
+      ctx.fillStyle=deC; ctx.font='bold 12px sans-serif';
+      let de='DOBLE ENGANCHE'; ctx.fillText(de, cxv-ctx.measureText(de).width/2, ry+rh+42);
+    }
+  }
+}
+function renderPlanosProyecto(){
+  let gal=document.getElementById('planosGaleria'); if(!gal)return;
+  saveCurrentItem();
+  let vista=document.getElementById('vista')?.value||'Vista por Fuera';
+  gal.innerHTML='';
+  if(!items||items.length===0){gal.innerHTML='<p style="color:#94a3b8">No hay ventanas en el proyecto.</p>';return;}
+  items.forEach(function(it, idx){
+    let d=getPlanoDataFromItem(it, vista);
+    let card=document.createElement('div'); card.className='planoCard';
+    card.innerHTML='<h4>Ventana #'+(idx+1)+' de '+items.length+'  ·  Ref. '+d.ref+'  ·  '+d.A+' × '+d.H+' cm  ·  '+d.rieles+'R / '+d.N+' naves</h4>';
+    let btnGroup=document.createElement('div');
+    btnGroup.style.cssText='display:flex;gap:6px;margin-bottom:8px';
+    let bVent=document.createElement('button');
+    bVent.type='button'; bVent.style.cssText='flex:1;margin:0;padding:6px;background:#38bdf8;color:#000;border-radius:6px;font-size:10.5px';
+    bVent.textContent='Plano ventana';
+    let bVid=document.createElement('button');
+    bVid.type='button'; bVid.style.cssText='flex:1;margin:0;padding:6px;background:#1e293b;color:#94a3b8;border-radius:6px;font-size:10.5px';
+    bVid.textContent='Plano vidrios';
+    btnGroup.appendChild(bVent); btnGroup.appendChild(bVid);
+    card.appendChild(btnGroup);
+    let cvVent=document.createElement('canvas');
+    cvVent.width=700; cvVent.height=380;
+    cvVent.style.display='block';
+    card.appendChild(cvVent);
+    let cvVid=document.createElement('canvas');
+    cvVid.width=700; cvVid.height=380;
+    cvVid.style.display='none';
+    card.appendChild(cvVid);
+    bVent.onclick=function(){
+      cvVent.style.display='block'; cvVid.style.display='none';
+      bVent.style.background='#38bdf8'; bVent.style.color='#000';
+      bVid.style.background='#1e293b'; bVid.style.color='#94a3b8';
+    };
+    bVid.onclick=function(){
+      cvVent.style.display='none'; cvVid.style.display='block';
+      bVent.style.background='#1e293b'; bVent.style.color='#94a3b8';
+      bVid.style.background='#facc15'; bVid.style.color='#000';
+    };
+    let meta=document.createElement('div'); meta.className='meta';
+    let det=[];
+    for(let i=1;i<=d.N;i++){
+      let parts=['Nave '+i];
+      if(d.fijas[i]) parts.push('FIJA'); else parts.push(d.abres[i]||'');
+      if(d.chapas[i]) parts.push('CHAPA');
+      if(d.porFuera[i]) parts.push('POR FUERA');
+      if(d.dobleEng&&d.dobleEng[i]) parts.push('DOBLE ENGANCHE');
+      if(d.posNave&&d.posNave[i]) parts.push(d.posNave[i]);
+      det.push(parts.join(' · '));
+    }
+    meta.innerHTML=det.join('<br>')+'<br><b style="color:#38bdf8">'+d.vista+'</b> · Color '+d.colorV+' / Vidrio '+d.colorVid+' · Cant. '+d.cant;
+    card.appendChild(meta);
+    gal.appendChild(card);
+    drawPlanoProfesional(cvVent.getContext('2d'), 700, 380, d, false);
+    drawPlanoVidriosProfesional(cvVid.getContext('2d'), 700, 380, d, false);
+  });
+}
+function makePlanoPdfImage(d){
+  let off=document.createElement('canvas');
+  off.width=900; off.height=540;
+  let ox=off.getContext('2d');
+  drawPlanoProfesional(ox, 900, 540, d, true);
+  return off.toDataURL('image/png');
+}
+function makePlanoVidriosPdfImage(d){
+  let off=document.createElement('canvas');
+  off.width=900; off.height=540;
+  let ox=off.getContext('2d');
+  drawPlanoVidriosProfesional(ox, 900, 540, d, true);
+  return off.toDataURL('image/png');
+}
+function abrirVentanaPlanos(){
+  saveCurrentItem();
+  let vista=document.getElementById('vista')?.value||'Vista por Fuera';
+  let proy=(document.getElementById('proyNombre')&&document.getElementById('proyNombre').value)||'Sin nombre';
+  let emp=(document.getElementById('empresaNombre')&&document.getElementById('empresaNombre').value)||'';
+  if(!items||items.length===0){alert('No hay ventanas');return;}
+  let page=document.getElementById('paginaSoloPlanos');
+  if(!page){
+    page=document.createElement('div');
+    page.id='paginaSoloPlanos';
+    document.body.appendChild(page);
+  }
+  page.style.cssText='display:block;position:fixed;inset:0;z-index:10000;background:#0a1220;color:#e2e8f0;overflow:auto;padding:16px;font-family:sans-serif;';
+  Array.from(document.body.children).forEach(function(el){
+    if(el.id==='paginaSoloPlanos')return;
+    if(!el.dataset.spPrev)el.dataset.spPrev=el.style.display||'';
+    el.style.display='none';
+  });
+  let html='<div style="max-width:920px;margin:0 auto">';
+  html+='<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;position:sticky;top:0;background:#0a1220;padding:10px 0;z-index:2">';
+  html+='<button onclick="cerrarVentanaPlanos()" style="width:auto;padding:8px 14px;background:#38bdf8;color:#000;font-weight:700;border:0;border-radius:8px;cursor:pointer">\u2190 Volver a calculadora</button>';
+  html+='<div style="flex:1"><div style="font-size:16px;font-weight:900;color:#38bdf8">\uD83D\uDCD0 Planos del proyecto'+(emp?' — '+emp.replace(/</g,''):'')+'</div>';
+  html+='<div style="font-size:11px;color:#94a3b8">'+proy.replace(/</g,'')+' · '+items.length+' ventana(s) · '+vista.replace(/</g,'')+'</div></div></div>';
+  html+='<div id="planosPaginaGaleria"></div></div>';
+  page.innerHTML=html;
+  let gal=document.getElementById('planosPaginaGaleria');
+  items.forEach(function(it,idx){
+    let d=getPlanoDataFromItem(it, vista);
+    let card=document.createElement('div');
+    card.style.cssText='background:#132034;border:1px solid #1e3a5f;border-radius:12px;padding:14px;margin-bottom:18px';
+    let h=document.createElement('h3');
+    h.style.cssText='margin:0 0 10px;color:#38bdf8;font-size:14px';
+    h.textContent='Ventana #'+(idx+1)+'  ·  Ref. '+d.ref+'  ·  '+d.A+' × '+d.H+' cm  ·  '+d.rieles+'R / '+d.N+' naves';
+    card.appendChild(h);
+    let btnGroup=document.createElement('div');
+    btnGroup.style.cssText='display:flex;gap:6px;margin-bottom:10px';
+    let bVent=document.createElement('button');
+    bVent.type='button'; bVent.style.cssText='flex:1;margin:0;padding:6px;background:#38bdf8;color:#000;border-radius:6px;font-size:11px;font-weight:700;border:0';
+    bVent.textContent='Plano ventana';
+    let bVid=document.createElement('button');
+    bVid.type='button'; bVid.style.cssText='flex:1;margin:0;padding:6px;background:#1e293b;color:#94a3b8;border-radius:6px;font-size:11px;font-weight:700;border:0';
+    bVid.textContent='Plano vidrios';
+    btnGroup.appendChild(bVent); btnGroup.appendChild(bVid);
+    card.appendChild(btnGroup);
+    let cvVent=document.createElement('canvas');
+    cvVent.width=700; cvVent.height=380;
+    cvVent.style.cssText='display:block;width:100%;max-width:700px;height:220px;border-radius:10px;border:1px solid #2a4a7a;background:#0b172a;margin:0 auto';
+    card.appendChild(cvVent);
+    let cvVid=document.createElement('canvas');
+    cvVid.width=700; cvVid.height=380;
+    cvVid.style.cssText='display:none;width:100%;max-width:700px;height:220px;border-radius:10px;border:1px solid #2a4a7a;background:#0b172a;margin:0 auto';
+    card.appendChild(cvVid);
+    bVent.onclick=function(){
+      cvVent.style.display='block'; cvVid.style.display='none';
+      bVent.style.background='#38bdf8'; bVent.style.color='#000';
+      bVid.style.background='#1e293b'; bVid.style.color='#94a3b8';
+    };
+    bVid.onclick=function(){
+      cvVent.style.display='none'; cvVid.style.display='block';
+      bVent.style.background='#1e293b'; bVent.style.color='#94a3b8';
+      bVid.style.background='#facc15'; bVid.style.color='#000';
+    };
+    let meta=document.createElement('div');
+    meta.style.cssText='color:#94a3b8;font-size:11px;margin-top:10px;line-height:1.55';
+    let det=[];
+    for(let i=1;i<=d.N;i++){
+      let parts=['Nave '+i];
+      if(d.fijas[i]) parts.push('FIJA'); else parts.push(d.abres[i]||'');
+      if(d.chapas[i]) parts.push('CHAPA');
+      if(d.porFuera[i]) parts.push('POR FUERA');
+      if(d.dobleEng&&d.dobleEng[i]) parts.push('DOBLE ENGANCHE');
+      if(d.posNave&&d.posNave[i]) parts.push(d.posNave[i]);
+      det.push(parts.join(' · '));
+    }
+    meta.innerHTML=det.join('<br>')+'<br><b style="color:#38bdf8">'+d.vista+'</b> · Color '+d.colorV+' / Vidrio '+d.colorVid+' · Cant. '+d.cant;
+    card.appendChild(meta);
+    gal.appendChild(card);
+    drawPlanoProfesional(cvVent.getContext('2d'),700,380,d,false);
+    drawPlanoVidriosProfesional(cvVid.getContext('2d'),700,380,d,false);
+  });
+  window.scrollTo(0,0);
+}
+function cerrarVentanaPlanos(){
+  let page=document.getElementById('paginaSoloPlanos');
+  if(page) page.style.display='none';
+  Array.from(document.body.children).forEach(function(el){
+    if(el.id==='paginaSoloPlanos')return;
+    if(el.dataset.spPrev!==undefined){
+      el.style.display=el.dataset.spPrev;
+      delete el.dataset.spPrev;
+    }
+  });
+}
+function preguntarPDF(){
+ let todas=confirm('¿Generar PDF de TODAS las ventanas del proyecto?\n\nAceptar = Todo el proyecto\nCancelar = Solo la ventana actual');
+ let conDespiece=confirm('¿Incluir DESPIECE de perfiles y costos?\n\nAceptar = Con despiece\nCancelar = Solo planos');
+ let conMateriales=false;
+ if(conDespiece){
+  conMateriales=confirm('¿Incluir MATERIALES y costos detallados?\n\nAceptar = Con materiales\nCancelar = Solo despiece de perfiles');
+ }
+ descargarPDF(todas, conDespiece, conMateriales);
+}
+function descargarPDF(todas, conDespiece, conMateriales){
+ const { jsPDF } = window.jspdf;
+ if(typeof todas==='undefined') todas=false;
+ saveCurrentItem();
+ let idxGuardado = currentItemIdx;
+ let listaIdx = todas ? items.map((_,i)=>i) : [currentItemIdx];
+ if(listaIdx.length===0){alert('No hay ventanas');return;}
+
+ const doc = new jsPDF('p','mm','a4');
+ const pageW = 210, pageH = 297, mL = 14, mR = 14, mT = 16, mB = 18;
+ const usableW = pageW - mL - mR;
+ let pageNum = 1;
+
+ function ensureSpace(need){
+  if(y + need > pageH - mB){
+   addFooter();
+   doc.addPage();
+   pageNum++;
+   y = mT;
+   return true;
+  }
+  return false;
+ }
+ function addFooter(){
+  doc.setFontSize(8);
+  doc.setTextColor(120);
+  doc.text('Pág. '+pageNum, pageW/2, pageH-10, {align:'center'});
+  let proy = (document.getElementById('proyNombre')&&document.getElementById('proyNombre').value)||'Sin nombre';
+  doc.text('Proyecto: '+proy, mL, pageH-10);
+  doc.setTextColor(0);
+ }
+ function line(txt, size, style){
+  size = size||10;
+  doc.setFontSize(size);
+  if(style==='bold') doc.setFont(undefined,'bold');
+  else doc.setFont(undefined,'normal');
+  let lines = doc.splitTextToSize(txt, usableW);
+  ensureSpace(lines.length * (size*0.45 + 1) + 2);
+  lines.forEach(function(ln){
+   doc.text(ln, mL, y);
+   y += size*0.45 + 1;
+  });
+ }
+ function sectionTitle(txt){
+  ensureSpace(14);
+  y += 3;
+  doc.setFillColor(15, 39, 68);
+  doc.rect(mL, y-5, usableW, 8, 'F');
+  doc.setTextColor(255);
+  doc.setFontSize(11);
+  doc.setFont(undefined,'bold');
+  doc.text(txt, mL+2, y);
+  doc.setTextColor(0);
+  doc.setFont(undefined,'normal');
+  y += 8;
+ }
+ function kv(label, val){
+  ensureSpace(7);
+  doc.setFontSize(9);
+  doc.setFont(undefined,'bold');
+  doc.text(label, mL, y);
+  doc.setFont(undefined,'normal');
+  doc.text(String(val), mL+55, y);
+  y += 5.5;
+ }
+ function drawTableHeader(cols, widths){
+  ensureSpace(10);
+  doc.setFillColor(30, 58, 95);
+  doc.rect(mL, y-4, usableW, 7, 'F');
+  doc.setTextColor(255);
+  doc.setFontSize(8);
+  doc.setFont(undefined,'bold');
+  let x = mL + 1;
+  cols.forEach(function(c,i){
+   doc.text(c, x, y);
+   x += widths[i];
+  });
+  doc.setTextColor(0);
+  doc.setFont(undefined,'normal');
+  y += 6;
+ }
+ function drawTableRow(cells, widths){
+  doc.setFontSize(7);
+  let maxH = 4.5;
+  let allParts = [];
+  cells.forEach(function(c,i){
+   let parts = doc.splitTextToSize(String(c), Math.max(6, widths[i]-1.5));
+   allParts.push(parts);
+   maxH = Math.max(maxH, parts.length * 3.4);
+  });
+  // Si la fila no cabe, nueva página antes de dibujarla
+  if(y + maxH + 6 > pageH - mB){
+   addFooter();
+   doc.addPage();
+   pageNum++;
+   y = mT;
+   drawTableHeader(['Elemento','Fórmula','Medida','Cant.','Tiras','Total cm','Sobra'], widths);
+  }
+  let rowTop = y;
+  let x = mL + 1;
+  allParts.forEach(function(parts,i){
+   doc.setTextColor(0);
+   doc.setFont(undefined,'normal');
+   doc.text(parts, x, rowTop);
+   x += widths[i];
+  });
+  y = rowTop + maxH + 1.5;
+  doc.setDrawColor(200);
+  doc.setLineWidth(0.15);
+  doc.line(mL, y, mL+usableW, y);
+  y += 1.5;
+ }
+
+
+ let y = mT;
+ let fecha = new Date().toLocaleString('es-CO');
+
+ let logoData = localStorage.getItem('empresaLogoV1') || '';
+ let empNom = (document.getElementById('empresaNombre')&&document.getElementById('empresaNombre').value.trim()) || localStorage.getItem('empresaNombreV1') || '';
+ if(logoData){
+  try{
+   let maxLogoW = 50, maxLogoH = 28;
+   let props = doc.getImageProperties(logoData);
+   let iw = props.width || 1, ih = props.height || 1;
+   let ratio = iw / ih;
+   let logoW = maxLogoW, logoH = logoW / ratio;
+   if(logoH > maxLogoH){ logoH = maxLogoH; logoW = logoH * ratio; }
+   doc.addImage(logoData, props.fileType || 'PNG', (pageW-logoW)/2, y, logoW, logoH);
+   y += logoH + 8;
+  }catch(e){
+   try{
+    let maxLogoW = 50, maxLogoH = 28;
+    doc.addImage(logoData, 'PNG', (pageW-maxLogoW)/2, y, maxLogoW, maxLogoH);
+    y += maxLogoH + 8;
+   }catch(e2){}
+  }
+ }
+ if(empNom){
+  doc.setFontSize(14);
+  doc.setFont(undefined,'bold');
+  doc.setTextColor(15,39,68);
+  doc.text(empNom, pageW/2, y, {align:'center'});
+  doc.setTextColor(0);
+  y += 8;
+ }
+ doc.setFontSize(18);
+ doc.setFont(undefined,'bold');
+ doc.text('COTIZACIÓN / DESPIECE DE VENTANAS', pageW/2, y, {align:'center'});
+ y += 10;
+ doc.setFontSize(11);
+ doc.setFont(undefined,'normal');
+ doc.text('Documento técnico de materiales y costos', pageW/2, y, {align:'center'});
+ y += 8;
+ kv('Empresa:', empNom || '—');
+ kv('Proyecto:', (document.getElementById('proyNombre')&&document.getElementById('proyNombre').value)||'Sin nombre');
+ kv('Fecha:', fecha);
+ kv('Ventanas en PDF:', todas ? (listaIdx.length+' (todas)') : '1 (ventana en vista)');
+ y += 4;
+ doc.setDrawColor(46, 168, 255);
+ doc.setLineWidth(0.5);
+ doc.line(mL, y, mL+usableW, y);
+ y += 8;
+
+ listaIdx.forEach(function(idx, n){
+  if(n>0 || y > mT + 40){
+   addFooter();
+   doc.addPage();
+   pageNum++;
+   y = mT;
+  }
+  if(idx !== currentItemIdx){
+   loadItem(idx);
+  } else {
+   calcular();
+  }
+  let r = document.getElementById('ref').value;
+  let A = document.getElementById('A').value;
+  let H = document.getElementById('H').value;
+  let ri = document.getElementById('rieles').value;
+  let Nv = document.getElementById('naves').value;
+  let cant = document.getElementById('cantVent').value;
+  let colV = document.getElementById('colorV').value;
+  let colVid = document.getElementById('colorVid').value;
+  let vista = document.getElementById('vista') ? document.getElementById('vista').value : '';
+  let info = document.getElementById('infoTop').innerText;
+  let totP = document.getElementById('totPiezas').innerText;
+  let planoT = document.getElementById('planoTxt').innerText;
+
+  sectionTitle('VENTANA '+(idx+1)+' de '+items.length+'  |  Ref. '+r+'  |  '+A+' × '+H+' cm');
+  kv('Referencia:', r);
+  kv('Rieles / Naves:', ri+'R  /  '+Nv+' naves');
+  kv('Medidas:', A+' cm (ancho) × '+H+' cm (alto)');
+  kv('Cantidad:', cant+' ventana(s)');
+  kv('Color perfil / vidrio:', colV+' / '+colVid);
+  kv('Vista:', vista);
+  kv('Resumen:', info);
+  kv('Piezas:', totP);
+  y += 2;
+
+  if(conDespiece){
+  sectionTitle('DESPIECE DE PERFILES');
+  let widths = [42, 38, 22, 18, 18, 24, 20];
+  drawTableHeader(['Elemento','Fórmula','Medida','Cant.','Tiras','Total cm','Sobra'], widths);
+  document.querySelectorAll('#tabla tr').forEach(function(tr){
+   let tds = tr.querySelectorAll('td');
+   if(tds.length >= 7){
+    let cells = Array.from(tds).map(function(td){return td.innerText;});
+    drawTableRow(cells, widths);
+   }
+  });
+  y += 3;
+  }
+
+  if(conMateriales){
+  sectionTitle('DETALLE DE COSTOS');
+  function colorPerfilNombre(nombre){
+   return [15, 39, 68];
+  }
+  let filasC = document.querySelectorAll('#costos .filaCosto');
+  if(filasC.length){
+   filasC.forEach(function(fila){
+    let lines = (fila.innerText||'').split('\n').map(function(s){return s.trim();}).filter(Boolean);
+    if(!lines.length) return;
+    let titulo = lines[0].replace(/[^\x20-\x7E\u00C0-\u024F\u1E00-\u1EFF]/g,'').replace(/\s+/g,' ').trim();
+    if(!titulo) titulo = lines[0];
+    let col = colorPerfilNombre(titulo);
+    doc.setFontSize(9);
+    doc.setFont(undefined,'bold');
+    doc.setTextColor(col[0], col[1], col[2]);
+    let tparts = doc.splitTextToSize(titulo, usableW);
+    ensureSpace(tparts.length * 4.5 + 2);
+    tparts.forEach(function(ln){ doc.text(ln, mL, y); y += 4.2; });
+    doc.setFont(undefined,'normal');
+    doc.setTextColor(40);
+    doc.setFontSize(8);
+    lines.slice(1).forEach(function(ln){
+     let parts = doc.splitTextToSize(ln, usableW);
+     ensureSpace(parts.length * 3.8 + 1);
+     parts.forEach(function(p){ doc.text(p, mL+2, y); y += 3.6; });
+    });
+    y += 3;
+    doc.setDrawColor(220);
+    doc.setLineWidth(0.15);
+    doc.line(mL, y, mL+usableW, y);
+    y += 3;
+    doc.setTextColor(0);
+   });
+  } else {
+   doc.setFontSize(8);
+   let costoText = document.getElementById('costos').innerText || '';
+   costoText.split('\n').forEach(function(line){
+    line = line.trim();
+    if(!line) return;
+    let parts = doc.splitTextToSize(line, usableW);
+    ensureSpace(parts.length * 4 + 2);
+    parts.forEach(function(ln){ doc.text(ln, mL, y); y += 3.8; });
+    y += 1;
+   });
+  }
+  y += 3;
+
+  sectionTitle('TOTALES');
+  kv('Costo total ventana:', document.getElementById('totalExacto').innerText);
+  kv('Con desperdicio:', document.getElementById('totalDesp').innerText);
+  kv('Barras / Retal:', document.getElementById('totalBarras').innerText+'  /  '+document.getElementById('totalSobra').innerText+' cm');
+  kv('Empaque:', document.getElementById('totalEmpaque').innerText);
+  kv('Mano de obra:', document.getElementById('totalMano2').innerText);
+  kv('Chapas:', document.getElementById('chapasTotTxt').innerText);
+  ensureSpace(10);
+  doc.setFontSize(12);
+  doc.setFont(undefined,'bold');
+  doc.setTextColor(15, 39, 68);
+  doc.text('TOTAL CON MANO DE OBRA: '+document.getElementById('totalConMano').innerText, mL, y);
+  doc.setTextColor(0);
+  doc.setFont(undefined,'normal');
+  y += 8;
+  // Desglose y cotizaciones
+  let desg=document.getElementById('desgloseCosto');
+  if(desg){
+   sectionTitle('DESGLOSE DE COSTOS');
+   let dlines=(desg.innerText||'').split('\n').map(function(t){return t.trim();}).filter(Boolean);
+   dlines.forEach(function(ln){ line(ln, 9); });
+   y+=2;
+  }
+  sectionTitle('COTIZACIONES');
+  kv('Cotización 1 (costo + %):', document.getElementById('cotiz1')?document.getElementById('cotiz1').innerText:'—');
+  kv('Cotización 1 c/desp:', document.getElementById('cotiz1Desp')?document.getElementById('cotiz1Desp').innerText:'—');
+  kv('Cotización 2 (por m²):', document.getElementById('cotiz2')?document.getElementById('cotiz2').innerText:'—');
+  kv('Ganancia s/ costo:', document.getElementById('cotiz2GanExacto')?document.getElementById('cotiz2GanExacto').innerText:'—');
+  kv('Ganancia s/ c/desp:', document.getElementById('cotiz2GanDesp')?document.getElementById('cotiz2GanDesp').innerText:'—');
+  y += 4;
+  }
+
+  try{
+   let src = document.getElementById('plano');
+   let off = document.createElement('canvas');
+   off.width = src.width; off.height = src.height;
+   let ox = off.getContext('2d');
+   ox.fillStyle = '#ffffff';
+   ox.fillRect(0,0,off.width,off.height);
+   let dpr = off.width / 360;
+   ox.setTransform(dpr,0,0,dpr,0,0);
+   ox.strokeStyle = '#0f172a';
+   ox.fillStyle = '#0f172a';
+   ox.lineWidth = 2;
+   ox.strokeRect(10,20,340,140);
+   let Npdf = parseInt(document.getElementById('naves').value)||3;
+   let dw = 340/Npdf;
+   for(let i=1;i<=Npdf;i++){
+    if(i<Npdf){ox.setLineDash([4,4]);ox.strokeStyle='#1d4ed8';ox.beginPath();ox.moveTo(10+dw*i,20);ox.lineTo(10+dw*i,160);ox.stroke();ox.setLineDash([]);}
+    let cx=10+dw*(i-1)+dw/2;
+    let fija=document.getElementById('fija'+i)?.checked;
+    let llevaChapa=document.getElementById('chapa'+i)?.checked;
+    let porF=document.getElementById('porFuera'+i)?.checked;
+    let abre=document.getElementById('abre'+i)?.value||'Derecha';
+    ox.fillStyle='#0f172a';ox.font='10px sans-serif';ox.fillText('Nave '+i,cx-16,28);
+    if(fija){
+      ox.strokeStyle='#b91c1c';ox.lineWidth=3;ox.beginPath();ox.moveTo(cx-15,50);ox.lineTo(cx+15,100);ox.stroke();ox.beginPath();ox.moveTo(cx+15,50);ox.lineTo(cx-15,100);ox.stroke();
+      ox.fillStyle='#b91c1c';ox.font='bold 9px sans-serif';ox.fillText('FIJA',cx-14,118);
+      if(llevaChapa){ox.fillStyle='#15803d';ox.font='bold 8px sans-serif';ox.fillText('CHAPA',cx-14,127);}
+      if(porF){ox.fillStyle='#7c3aed';ox.font='bold 8px sans-serif';ox.fillText('POR FUERA',cx-22,138);}
+    } else {
+      ox.fillStyle='#a16207';ox.font='bold 22px sans-serif';
+      if(abre=='Derecha')ox.fillText('\u2192',cx-7,85);else if(abre=='Izquierda')ox.fillText('\u2190',cx-7,85);else ox.fillText('\u2194',cx-11,85);
+      ox.fillStyle='#0f172a';ox.font='9px sans-serif';ox.fillText(abre,cx-15,110);
+      if(llevaChapa){ox.fillStyle='#15803d';ox.font='bold 8px sans-serif';ox.fillText('CHAPA',cx-14,127);}
+      else{ox.fillStyle='#64748b';ox.font='7px sans-serif';ox.fillText('sin chapa',cx-14,127);}
+      if(porF){ox.fillStyle='#7c3aed';ox.font='bold 8px sans-serif';ox.fillText('POR FUERA',cx-22,138);}
+    }
+   }
+   let vistap = document.getElementById('vista')?.value||'';
+   let chapasP = 0; for(let i=1;i<=Npdf;i++) if(document.getElementById('chapa'+i)?.checked) chapasP++;
+   ox.fillStyle='#a16207';ox.font='bold 10px sans-serif';ox.fillText(vistap.toUpperCase()+' - '+chapasP+' CHAPAS',10,180);
+   ox.fillStyle='#334155';ox.font='9px sans-serif';
+   ox.fillText((document.getElementById('rieles').value)+'R - '+(document.getElementById('ref').value)+' - '+planoT.substring(0,60),10,192);
+   let imgData = off.toDataURL('image/png');
+   ensureSpace(75);
+   sectionTitle('PLANO DE VISTA');
+   line(planoT, 9);
+   y += 2;
+   ensureSpace(65);
+   doc.setDrawColor(180);
+   doc.rect(mL, y, 120, 65);
+   doc.addImage(imgData, 'PNG', mL, y, 120, 65);
+   y += 70;
+  }catch(e){}
+ });
+
+ let vistaPdf=document.getElementById('vista')?.value||'Vista por Fuera';
+ listaIdx.forEach(function(idx){
+  let it=items[idx]; if(!it)return;
+  addFooter();
+  doc.addPage();
+  pageNum++;
+  y=mT;
+  let d=getPlanoDataFromItem(it, vistaPdf);
+  sectionTitle('PLANO DETALLADO VENTANA — Ventana '+(idx+1)+' de '+items.length);
+  kv('Referencia:', d.ref);
+  kv('Rieles / Naves:', d.rieles+'R  /  '+d.N+' naves');
+  kv('Medidas:', d.A+' cm × '+d.H+' cm');
+  kv('Cantidad:', d.cant+' ventana(s)');
+  kv('Color / Vidrio:', d.colorV+' / '+d.colorVid);
+  kv('Vista:', d.vista);
+  y+=4;
+  try{
+   let img=makePlanoPdfImage(d);
+   let maxW=usableW, maxH=pageH-mB-y-6;
+   let imgW=maxW, imgH=imgW*(540/900);
+   if(imgH>maxH){ imgH=maxH; imgW=imgH*(900/540); }
+   let xImg=mL+(usableW-imgW)/2;
+   doc.setDrawColor(180);
+   doc.rect(xImg, y, imgW, imgH);
+   doc.addImage(img, 'PNG', xImg, y, imgW, imgH);
+   y+=imgH+4;
+   doc.setFontSize(8);
+   doc.setFont(undefined,'normal');
+   for(let i=1;i<=d.N;i++){
+    let parts='Nave '+i+': ';
+    if(d.fijas[i]) parts+='FIJA'; else parts+=(d.abres[i]||'');
+    if(d.chapas[i]) parts+=' · CHAPA';
+    if(d.porFuera[i]) parts+=' · POR FUERA';
+    if(d.dobleEng&&d.dobleEng[i]) parts+=' · DOBLE ENGANCHE';
+    if(d.posNave&&d.posNave[i]) parts+=' · '+d.posNave[i];
+    if(y+5>pageH-mB){ addFooter(); doc.addPage(); pageNum++; y=mT; }
+    doc.text(parts, mL, y); y+=4.5;
+   }
+  }catch(e){}
+
+  addFooter();
+  doc.addPage();
+  pageNum++;
+  y=mT;
+  sectionTitle('PLANO DETALLADO VIDRIOS — Ventana '+(idx+1)+' de '+items.length);
+  kv('Referencia:', d.ref);
+  kv('Color Vidrio:', d.colorVid);
+  kv('Grosor Vidrio:', (vidrioConfig[d.ref]&&vidrioConfig[d.ref].grosor?vidrioConfig[d.ref].grosor:'—'));
+  y+=4;
+  try{
+   let imgVid=makePlanoVidriosPdfImage(d);
+   let maxW=usableW, maxH=pageH-mB-y-6;
+   let imgW=maxW, imgH=imgW*(540/900);
+   if(imgH>maxH){ imgH=maxH; imgW=imgH*(900/540); }
+   let xImg=mL+(usableW-imgW)/2;
+   doc.setDrawColor(180);
+   doc.rect(xImg, y, imgW, imgH);
+   doc.addImage(imgVid, 'PNG', xImg, y, imgW, imgH);
+   y+=imgH+4;
+  }catch(e){}
+ });
+
+ if(idxGuardado !== currentItemIdx){
+  loadItem(idxGuardado);
+ }
+ addFooter();
+ let nombre = todas
+  ? 'Proyecto_'+(document.getElementById('proyNombre').value||'ventanas')+'_todas.pdf'
+  : 'Ventana_'+document.getElementById('ref').value+'_'+document.getElementById('A').value+'x'+document.getElementById('H').value+'.pdf';
+ doc.save(nombre.replace(/\s+/g,'_'));
+}
+function updateDespieceForm(srcIdx,newForm,tipo){
+ if(isLocked){alert('Desbloquea primero');return;}
+ newForm=(newForm+'').trim();
+ let r=ref.value, ri=document.getElementById('rieles').value, N=parseInt(document.getElementById('naves').value,10)||3;
+ if(tipo==='horiz'){
+  if(!horizForms[r])horizForms[r]={};if(!horizForms[r][ri])horizForms[r][ri]={};
+  horizForms[r][ri][String(N)]=newForm;horizForms[r][ri][N]=newForm;
+ } else if(tipo==='fijoEng'){fijo7038Config.enganche.form=newForm;}
+ else if(tipo==='fijoTras'){fijo7038Config.traslape.form=newForm;}
+ else if(tipo==='alf'){if(!alfConfig[r])alfConfig[r]={};if(!alfConfig[r][ri])alfConfig[r][ri]={f:'A',c:'1',p:30000};alfConfig[r][ri].f=newForm;}
+ else if(tipo==='extraDE'){if(!extraNaveForms.vidrioAnchoDobleEng)extraNaveForms.vidrioAnchoDobleEng={form:newForm,cant:'1'};else extraNaveForms.vidrioAnchoDobleEng.form=newForm;}
+ else if(tipo==='extraAltoPF'){if(!extraNaveForms.altoFijoPorFuera)extraNaveForms.altoFijoPorFuera={form:newForm,cant:'1'};else extraNaveForms.altoFijoPorFuera.form=newForm;}
+ else if(tipo==='extraAnchoPF'){if(!extraNaveForms.anchoFijoPorFuera)extraNaveForms.anchoFijoPorFuera={form:newForm,cant:'1'};else extraNaveForms.anchoFijoPorFuera.form=newForm;}
+ else if(srcIdx>=0&&current[r]&&current[r][srcIdx]){current[r][srcIdx].form=newForm;}
+ save();saveCurrentItem();calcular();
+}
+function calcular(){
+ let A=parseFloat(document.getElementById('A').value)||0,H=parseFloat(document.getElementById('H').value)||0,cantV=parseInt(cantVent.value)||1,r=ref.value,N=parseInt(document.getElementById('naves').value,10)||3;
+ let rieles=rielesEl.value;let colV=colorV.value||'',colVid=colorVid.value||'';
+ let vista=document.getElementById('vista')?.value||'Vista por Fuera';
+ let manoM2Val=parseFloat(manoObraM2.value)||0;
+ let m2PorVent=(A*H)/10000; let m2Total=m2PorVent*cantV; let costoMano=m2Total*manoM2Val;
+ let chapasPorVent=0; let fijasCount=0;
+ for(let i=1;i<=N;i++){ if(document.getElementById('chapa'+i)?.checked) chapasPorVent++; if(document.getElementById('fija'+i)?.checked) fijasCount++; }
+ let chapasTotales=chapasPorVent*cantV;
+ document.getElementById('m2Vent').innerText=m2PorVent.toFixed(2)+' m²';
+ document.getElementById('m2Total').innerText=m2Total.toFixed(2)+' m²';
+ document.getElementById('m2Total2').innerText=m2Total.toFixed(2);
+ document.getElementById('m2CantTxt').innerText=cantV;
+ document.getElementById('costoMano').innerText='$'+costoMano.toFixed(0);
+ document.getElementById('totalMano2').innerText='$'+costoMano.toFixed(0);
+ document.getElementById('manoValTxt').innerText=manoM2Val;
+ document.getElementById('chapasTxt').innerText=chapasPorVent+' / '+chapasTotales;
+ document.getElementById('chapasTotTxt').innerText=chapasTotales+' chapas ('+chapasPorVent+' por ventana)';
+ document.getElementById('coloresPlanoTxt').innerText=colV+' / '+colVid+' - '+vista;
+ let box7038=document.getElementById('sillar7038Box');
+ if(r=='7038'){box7038.style.display='block';} else {box7038.style.display='none';}
+ document.getElementById('sillar7038Info').innerText=r=='7038'?(fijasCount>0&&sillar7038Tipo=='empotrar'?'7038 '+sillar7038Tipo.toUpperCase()+' + '+fijasCount+' FIJA(S)':'7038 - '+sillar7038Tipo.toUpperCase()):r+' - Grados jamba '+gradosJambaConfig[r]+'°';
+ let tbody=tabla;tbody.innerHTML='';costos.innerHTML='';window._empaqueCostoHtml='';let totalExacto=0,totalDesp=0,totalBarras=0,totalSobraCm=0,totalEmpaqueMl=0,felpaCmAcc=0,costoAluEx=0,costoAluDesp=0,costoChapaAcc=0,costoFelpaAcc=0,costoEmpAcc=0,costoOtrosAcc=0;
+ let lista=[...current[r]];
+ if(r=='7038' && sillar7038Tipo=='empotrar' && fijasCount>0){
+   lista.push({el:"Enganche fijo 7038",form:fijo7038Config.enganche.form,cant:fijo7038Config.enganche.cant,precio:fijo7038Config.enganche.precio,isFijo:true});
+   lista.push({el:"Traslape fijo 7038",form:fijo7038Config.traslape.form,cant:fijo7038Config.traslape.cant,precio:fijo7038Config.traslape.precio,isFijo:true});
+ }
+ let porFueraCount=0,dobleEngCount=0;
+ for(let i=1;i<=N;i++){ if(document.getElementById('porFuera'+i)?.checked) porFueraCount++; if(document.getElementById('dobleEng'+i)?.checked) dobleEngCount++; }
+ if(dobleEngCount>0){
+   if(!extraNaveForms.vidrioAnchoDobleEng) extraNaveForms.vidrioAnchoDobleEng={form:defaultDEForm(),cant:"1"};
+   if(!extraNaveForms.vidrioAnchoDobleEng.form) extraNaveForms.vidrioAnchoDobleEng.form=defaultDEForm();
+   let formDEFinal=(r==='7038' && extraNaveForms.vidrioAnchoDobleEng.form.includes('+ 0.7')) ? '(A-20)/4' : extraNaveForms.vidrioAnchoDobleEng.form;
+   let cDE=(parseFloat(extraNaveForms.vidrioAnchoDobleEng.cant)||1)*dobleEngCount;
+   lista.push({el:"Vidrio ancho doble enganche",form:formDEFinal,cant:String(cDE),precio:0,isExtra:true});
+ }
+ if(porFueraCount>0){
+   if(!extraNaveForms.altoFijoPorFuera) extraNaveForms.altoFijoPorFuera={form:"H+2",cant:"1"};
+   if(!extraNaveForms.anchoFijoPorFuera) extraNaveForms.anchoFijoPorFuera={form:"(A-16.10)/3 + 1",cant:"1"};
+   let cPF=(parseFloat(extraNaveForms.altoFijoPorFuera.cant)||1)*porFueraCount;
+   lista.push({el:"Alto fijo por fuera",form:extraNaveForms.altoFijoPorFuera.form,cant:String(cPF),precio:0,isExtra:true});
+   let cPF2=(parseFloat(extraNaveForms.anchoFijoPorFuera.cant)||1)*porFueraCount;
+   lista.push({el:"Ancho fijo por fuera",form:extraNaveForms.anchoFijoPorFuera.form,cant:String(cPF2),precio:0,isExtra:true});
+ }
+ let alfConf=(alfConfig[r]&&alfConfig[r][rieles])?alfConfig[r][rieles]:{f:"A",c:"1",p:30000};
+ if(document.getElementById('alfajia').checked){lista.push({el:`Alfajia ${r} ${rieles}R (${colV})`,form:alfConf.f,cant:alfConf.c,precio:alfConf.p,isAlf:true,isRiel:true});}
+ let vidAlto=0,vidAncho=0;
+ lista.forEach(o=>{if(o.el.toLowerCase().includes('vidrio alto')&&!o.el.toLowerCase().includes('empaque')){vidAlto=evalF(o.form,A,H,N);} if(o.el.toLowerCase().includes('vidrio ancho')&&!o.el.toLowerCase().includes('empaque')){vidAncho=evalF(o.form,A,H,N);}});
+ infoTop.innerText=`${r} ${rieles}R - ${colV} - Vidrio ${colVid} ${(vidrioConfig[r]&&vidrioConfig[r].grosor)?vidrioConfig[r].grosor:''} - ${vista} - ${N} naves (${fijasCount} fijas) - Grados jamba ${gradosJambaConfig[r]}° - Chapas ${chapasPorVent}`;
+ lista.forEach((o,idx)=>{
+  let formUsar=o.form;
+  let nomEl=(o.el+'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  let esHoriz=(nomEl.includes('horizontal')||nomEl.includes('zocalo'))&&!o.isFijo;
+  if(esHoriz){
+    let riK=String(rieles), nK=String(N);
+    if(!horizForms[r]) horizForms[r]=JSON.parse(JSON.stringify(horizDefault[r]||horizDefault['744']));
+    if(!horizForms[r][riK]) horizForms[r][riK]=JSON.parse(JSON.stringify((horizDefault[r]||horizDefault['744'])[riK]||{}));
+    let hf=horizForms[r][riK][nK];
+    if(hf===undefined||hf===null||hf==='') hf=horizForms[r][riK][N];
+    if(hf===undefined||hf===null||hf===''){
+      let hd=(horizDefault[r]||horizDefault['744']);
+      hf=hd&&hd[riK]&&(hd[riK][nK]||hd[riK][N]);
+    }
+    if(hf===undefined||hf===null||hf==='') hf='(A)/'+nK;
+    // Si la fórmula quedó corrupta por descuentos repetidos, volver al default de la referencia
+    if(typeof hf==='string' && (hf.match(/\)\s*-\s*[\d.]+/g)||[]).length>1){
+      let hd=(horizDefault[r]||horizDefault['744']);
+      let hf0=hd&&hd[riK]&&(hd[riK][nK]||hd[riK][N]);
+      if(hf0) hf=hf0;
+      else hf='(A)/'+nK;
+      horizForms[r][riK][nK]=hf;
+    }
+    formUsar=hf;
+    // Descontar guías solo en el cálculo (mm→cm). NO guardar la fórmula modificada (evita acumular -0.4)
+    if(anchoGuiasConfig.descontar==='si' && anchoGuiasConfig.valor) {
+      let valCm = Number(anchoGuiasConfig.valor) / 10;
+      formUsar = '(' + hf + ') - ' + valCm;
+    }
+  }
+  let esTraslape=r=='7038' && nomEl.includes('traslape') &&!nomEl.includes('fijo') &&!o.isFijo;
+  let esEnganche=r=='7038' && nomEl.includes('enganche') &&!nomEl.includes('fijo') &&!o.isFijo;
+  if(esTraslape||esEnganche){
+    let desc=sillar7038Desc[sillar7038Tipo][esTraslape?'traslape':'enganche'];
+    formUsar=`H-${desc}`;
+  }
+  let esEmpaque=nomEl.includes('empaque');
+  let esTrasCant=nomEl.includes('traslape')&&!nomEl.includes('fijo')&&!o.isFijo;
+  let esEngCant=nomEl.includes('enganche')&&!nomEl.includes('fijo')&&!o.isFijo;
+  let med=0;
+  if(esEmpaque){if(vidAlto>0&&vidAncho>0){med=2*(vidAlto+vidAncho);} else {med=2*(H+A)/N;}} else {med=evalF(formUsar,A,H,N);if(isNaN(med))med=0;}
+  let cantPorVent=0;
+  if(esEmpaque){cantPorVent=N;}
+  else if(esTrasCant||esEngCant){let te=getTECant(r,rieles,N);cantPorVent=esTrasCant?te.t:te.e;}
+  else if(esHoriz){
+    if(nomEl.includes('sup')||nomEl.includes('inf')) cantPorVent=N;
+    else cantPorVent=2*N;
+  }
+  else {cantPorVent=evalF(o.cant,A,H,N);if(isNaN(cantPorVent))cantPorVent=N;}
+  let totalUnidades=cantPorVent*cantV; let total=med*totalUnidades;
+  let barras=0,sobra=0; let esVid=o.el.toLowerCase().includes('vidrio')&&!esEmpaque;
+  if(!esVid&&!esEmpaque){barras=Math.ceil(total/600); sobra=barras*600-total;}
+  let isRielDep=o.isAlf?true:esPerfilRieles(o.el);
+  let etiqueta=o.el;
+  if(esEmpaque){
+   totalEmpaqueMl+=total/100;
+   return;
+  }
+  if((nomEl.includes('traslape')||nomEl.includes('enganche')||nomEl.includes('horizontal')||nomEl.includes('zocalo')||nomEl.includes('jamba'))&&!nomEl.includes('vidrio')){
+    let factorFelpa=nomEl.includes('jamba')?2:1;
+    felpaCmAcc+=med*totalUnidades*factorFelpa;
+  }
+  let tipoForm='perfil';
+  let srcIdx=(!o.isFijo&&!o.isExtra&&!o.isAlf&&idx<(current[r]?current[r].length:0))?idx:-1;
+  if(esHoriz) tipoForm='horiz';
+  else if(o.isFijo&&nomEl.includes('enganche')) tipoForm='fijoEng';
+  else if(o.isFijo&&nomEl.includes('traslape')) tipoForm='fijoTras';
+  else if(o.isAlf) tipoForm='alf';
+  else if(o.isExtra&&nomEl.includes('doble')) tipoForm='extraDE';
+  else if(o.isExtra&&nomEl.includes('alto')) tipoForm='extraAltoPF';
+  else if(o.isExtra&&nomEl.includes('ancho')) tipoForm='extraAnchoPF';
+  let formAttr=(formUsar+'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  let formCell=isLocked
+    ? `<td class="formVerde">${formUsar}</td>`
+    : `<td><input value="${formAttr}" class="formVerde" style="width:100%;min-width:65px;background:#0a1220;border:1px solid #22c55e;border-radius:4px;color:#22c55e;font-weight:900;padding:2px 3px" onchange="updateDespieceForm(${srcIdx},this.value,'${tipoForm}')" title="Editar fórmula"></td>`;
+  if(esVid){ return; }
+  tbody.innerHTML+=`<tr style="${o.isFijo?'background:#1a2a0a':''}"><td>${etiqueta}</td>${formCell}<td>${med.toFixed(2)}</td><td><span class="cantRojo">${totalUnidades}</span></td><td><span class="cantAzul">${barras}</span></td><td>${total.toFixed(2)}</td><td>${sobra.toFixed(2)}</td></tr>`;
+
+  if(!esVid&&!esEmpaque){
+   let cT=o.isAlf?alfConf.p:(preciosRiel[r][rieles][idx]||o.precio);
+   if(o.isFijo) cT=o.precio;
+   let ex=(total/600)*cT; let de=barras*cT; costoAluEx+=ex;costoAluDesp+=de;totalExacto+=ex;totalDesp+=de;totalBarras+=barras;totalSobraCm+=sobra;
+   let precioCm=cT/600;
+   let retalPorTira=sobra>0?`Retal: ${sobra.toFixed(2)} cm queda de ${barras} tira(s) de 600 cm`:`Sin retal`;
+   if(o.isFijo){
+    costos.innerHTML+=`<div class="filaCosto" style="border-color:#22c55e;background:#0f1f0a"><b style="color:#22c55e">\u2B50 ${etiqueta}</b><span>Fórmula: ${formUsar} = ${med.toFixed(2)} cm</span><span>Cantidad: ${totalUnidades}</span><span>Total: ${total.toFixed(2)} cm</span><span>Tiras 600cm: ${barras}</span><span>Precio tira: $${cT}</span><span>Precio cm: $${precioCm.toFixed(2)}</span><span style="color:#22c55e">Pedazo exacto: (${total.toFixed(2)}/600)*$${cT} = $${ex.toFixed(0)}</span><span style="color:#facc15">Con desperdicio: ${barras} x $${cT} = $${de.toFixed(0)}</span><span>${retalPorTira}</span></div>`;
+   } else if(o.isAlf){
+    costos.innerHTML+=`<div class="filaCosto" style="border-color:#facc15"><b>\uD83D\uDD36 ${etiqueta}</b><span>Total: ${total.toFixed(2)} cm</span><span>Tiras: ${barras}</span><span>Precio: $${cT}</span><span style="color:#22c55e">Pedazo $${ex.toFixed(0)}</span><span style="color:#facc15">Desp $${de.toFixed(0)}</span><span>${retalPorTira}</span></div>`;
+   } else {
+    costos.innerHTML+=`<div class="filaCosto"><b style="color:#38bdf8">${etiqueta}</b><span>Fórmula: ${formUsar} = ${med.toFixed(2)} cm</span><span>Cantidad: ${totalUnidades}</span><span>Total: ${total.toFixed(2)} cm</span><span>Tiras 600cm: ${barras}</span><span>Precio tira 600cm: $${cT}</span><span>Precio cm: $${precioCm.toFixed(2)}</span><span style="color:#22c55e">Precio pedazo: (${total.toFixed(2)}/600)*$${cT} = $${ex.toFixed(0)}</span><span style="color:#facc15">Con desperdicio: ${barras} x $${cT} = $${de.toFixed(0)}</span><span>${retalPorTira}</span><div style="margin-top:4px;display:flex;gap:4px;align-items:center"><span style="font-size:10px">Precio tira:</span><input type="number" value="${cT}" onchange="savePrecioRiel(${idx},this.value,${isRielDep})" style="width:80px;padding:2px 4px"></div></div>`;
+   }
+  }
+ });
+ document.getElementById('empaqueTxt').innerText=totalEmpaqueMl.toFixed(2)+' ml';
+ document.getElementById('totalEmpaque').innerText=totalEmpaqueMl.toFixed(2)+' ml';
+ let precioVid= (vidrioConfig[r]&&vidrioConfig[r].precioM2)?vidrioConfig[r].precioM2:0;
+ let grosorVidTxt= (vidrioConfig[r]&&vidrioConfig[r].grosor)?vidrioConfig[r].grosor:'';
+ let areaVidrioM2=0;
+ if(vidAlto>0 && vidAncho>0){ areaVidrioM2 = (vidAlto * vidAncho / 10000) * N * cantV; }
+ let costoVidrio = areaVidrioM2 * precioVid;
+ totalExacto += costoVidrio;
+ totalDesp += costoVidrio;
+ if(precioVid>0 || areaVidrioM2>0){
+  costos.innerHTML+=`<div class="filaCosto" style="border-color:#facc15;background:#1a1500;color:#e2e8f0"><b style="color:#facc15">\uD83E\uDE9F Vidrio ${colVid} ${grosorVidTxt}</b><span>Área: ${areaVidrioM2.toFixed(3)} m² (${N} naves x ${cantV} vent)</span><span>Precio: $${precioVid}/m²</span><span style="color:#22c55e">Costo vidrio: $${costoVidrio.toFixed(0)}</span></div>`;
+ }
+ let navesConGuia=0,navesMoviles=0;
+ for(let i=1;i<=N;i++){
+  let esFija=!!document.getElementById('fija'+i)?.checked;
+  let esPorF=!!document.getElementById('porFuera'+i)?.checked;
+  if(!(esFija&&esPorF)) navesConGuia++;
+  if(!esFija) navesMoviles++;
+ }
+ let felpaMl=parseFloat((felpaCmAcc/100).toFixed(2));
+ let empMl=parseFloat(totalEmpaqueMl.toFixed(2));
+ let es5020=(r+'').toLowerCase().indexOf('5020')>=0;
+ if(!acc[r])acc[r]=JSON.parse(JSON.stringify(accDefaultItems));
+ let haveEmp=acc[r].some(a=>(a.n+'').toLowerCase().includes('empaque'));
+ if(!haveEmp)acc[r].push({n:'Empaque',c:'0',p:0});
+ acc[r].forEach(function(a){
+  if(a.p===undefined||a.p===null)a.p=0;
+  let nom=(a.n+'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  let esGuia=(nom.indexOf('guia')>=0);
+  let esSup=esGuia&&(nom.indexOf('superior')>=0||nom.indexOf('sup')>=0);
+  let esInf=esGuia&&(nom.indexOf('inferior')>=0||nom.indexOf('inf')>=0);
+  if(nom.indexOf('chapa')>=0) a.c=String(chapasPorVent*cantV);
+  else if(esSup) a.c=String(2*navesConGuia*cantV);
+  else if(esInf) a.c=es5020?'0':String(2*navesConGuia*cantV);
+  else if(nom.indexOf('rodachina')>=0) a.c=String(2*navesMoviles*cantV);
+  else if(nom.indexOf('tornillo')>=0) a.c=String(tornillosPorRef(r,N,cantV));
+  else if(nom.indexOf('felpa')>=0) a.c=String(felpaMl);
+  else if(nom.indexOf('empaque')>=0) a.c=String(empMl);
+ });
+ try{renderAcc();}catch(e){}
+ if(acc[r]){acc[r].forEach(a=>{
+  let cant=parseFloat(a.c)||0;
+  let precioU=parseFloat(a.p)||0;
+  let costoAcc=cant*precioU;
+  let nom=(a.n+'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+  if(nom.indexOf('chapa')>=0) costoChapaAcc+=costoAcc;
+  else if(nom.indexOf('felpa')>=0) costoFelpaAcc+=costoAcc;
+  else if(nom.indexOf('empaque')>=0) costoEmpAcc+=costoAcc;
+  else costoOtrosAcc+=costoAcc;
+  totalExacto+=costoAcc;totalDesp+=costoAcc;
+ });}
+ totPiezas.innerText=lista.length+' perfiles - '+m2Total.toFixed(2)+' m² - '+chapasTotales+' chapas'+(fijasCount>0&&r=='7038'&&sillar7038Tipo=='empotrar'?' - '+fijasCount+' FIJA(S) + FIJO':'')+' - Grados '+gradosJambaConfig[r]+'°';
+ let costoVid=costoVidrio||0;
+ let costoTotalEx=costoAluEx+costoVid+costoEmpAcc+costoChapaAcc+costoFelpaAcc+costoOtrosAcc+costoMano;
+ let costoTotalDesp=costoAluDesp+costoVid+costoEmpAcc+costoChapaAcc+costoFelpaAcc+costoOtrosAcc+costoMano;
+ totalExacto=costoTotalEx; totalDesp=costoTotalDesp;
+ let cantChapaAcc=0,cantFelpaAcc=0,cantEmpAcc=0;
+ if(acc[r])acc[r].forEach(function(a){let nom=(a.n+'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');let c=parseFloat(a.c)||0;if(nom.indexOf('chapa')>=0)cantChapaAcc+=c;else if(nom.indexOf('felpa')>=0)cantFelpaAcc+=c;else if(nom.indexOf('empaque')>=0)cantEmpAcc+=c;});
+ let desg=document.getElementById('desgloseCosto');
+ if(desg){
+  desg.innerHTML=
+   '<div style="color:#94a3b8;font-size:11px;line-height:1.6">'+
+   'Aluminio: <b style="color:#fff">$'+costoAluEx.toFixed(0)+'</b>'+(costoAluDesp!=costoAluEx?' <span style="color:#64748b">(c/desp $'+costoAluDesp.toFixed(0)+')</span>':'')+'<br>'+
+   'Vidrio: <b style="color:#facc15">'+(areaVidrioM2||0).toFixed(3)+' m²</b> = <b style="color:#fff">$'+costoVid.toFixed(0)+'</b><br>'+
+   'Empaque: <b style="color:#38bdf8">'+cantEmpAcc+' ML</b> = <b style="color:#fff">$'+cantEmpAcc.toFixed(0)+'</b><br>'+
+   'Chapas: <b style="color:#facc15">'+cantChapaAcc+'</b> = <b style="color:#fff">$'+cantChapaAcc.toFixed(0)+'</b><br>'+
+   'Felpa: <b style="color:#38bdf8">'+cantFelpaAcc+' ML</b> = <b style="color:#fff">$'+cantFelpaAcc.toFixed(0)+'</b><br>'+
+   'Otros accesorios (tornillos, guías, rodachinas…): <b style="color:#fff">$'+costoOtrosAcc.toFixed(0)+'</b><br>'+
+   'Mano de obra: <b style="color:#facc15">$'+costoMano.toFixed(0)+'</b> ('+m2Total.toFixed(2)+' m² × $'+manoM2Val+')'+
+   '</div>';
+ }
+ totalExactoEl.innerText='$'+costoTotalEx.toFixed(0);totalDespEl.innerText='$'+costoTotalDesp.toFixed(0);totalBarrasEl.innerText=totalBarras;
+ document.getElementById('totalSobra').innerText=totalSobraCm.toFixed(0);
+ document.getElementById('totalConMano').innerText='$'+costoTotalDesp.toFixed(0);
+ document.getElementById('totalMano2').innerText='$'+costoMano.toFixed(0);
+ document.getElementById('m2Total2').innerText=m2Total.toFixed(2);
+ document.getElementById('manoValTxt').innerText=manoM2Val;
+ document.getElementById('chapasTotTxt').innerText=chapasTotales;
+ let ventaM2Val=parseFloat(document.getElementById('precioVentaM2').value)||0;
+ let pctEspVal=parseFloat(document.getElementById('pctGanancia').value)||0;
+ let ventaTotal=m2Total*ventaM2Val;
+ let ganEspExacto=costoTotalEx*(pctEspVal/100);
+ let ganEspDesp=costoTotalDesp*(pctEspVal/100);
+ let ganRealExacto=ventaTotal-costoTotalEx;
+ let gananciaReal=ventaTotal-costoTotalDesp;
+ let pctReal=ventaTotal>0?(gananciaReal/ventaTotal*100):0;
+ let cotiz1=costoTotalEx+ganEspExacto;
+ let cotiz1Desp=costoTotalDesp+ganEspDesp;
+ document.getElementById('totalVenta').innerText='$'+ventaTotal.toFixed(0);
+ document.getElementById('m2Total3').innerText=m2Total.toFixed(2);
+ document.getElementById('ventaValTxt').innerText=ventaM2Val;
+ document.getElementById('pctEspTxt').innerText=pctEspVal+'%';
+ document.getElementById('ganEspExacto').innerText='$'+ganEspExacto.toFixed(0);
+ document.getElementById('ganEspDesp').innerText='$'+ganEspDesp.toFixed(0);
+ document.getElementById('ganRealExacto').innerText='$'+ganRealExacto.toFixed(0);
+ document.getElementById('gananciaReal').innerText='$'+gananciaReal.toFixed(0);
+ document.getElementById('pctRealTxt').innerText='('+pctReal.toFixed(1)+'% real'+(pctReal>=pctEspVal?' \u2713':' \u2717')+')';
+ document.getElementById('pctCot1').innerText=pctEspVal;
+ document.getElementById('cotiz1').innerText='$'+cotiz1.toFixed(0);
+ document.getElementById('cotiz1Desp').innerText='$'+cotiz1Desp.toFixed(0);
+ document.getElementById('cotiz2').innerText='$'+ventaTotal.toFixed(0);
+ document.getElementById('cotiz2GanExacto').innerText='$'+ganRealExacto.toFixed(0);
+ document.getElementById('cotiz2GanDesp').innerText='$'+gananciaReal.toFixed(0);
+ let cv=document.getElementById('plano');if(!cv)return;let x=cv.getContext('2d');
+ let dpr=window.devicePixelRatio||1;
+ cv.width=1200*dpr;cv.height=660*dpr;cv.style.width='100%';cv.style.height='auto';
+ x.setTransform(dpr,0,0,dpr,0,0);x.imageSmoothingEnabled=false;
+ drawPlanoProfesional(x, 1200, 660, getPlanoDataFromItem({
+    naves: N, A: A, H: H, ref: r, rieles: rieles, colorV: colV, colorVid: colVid, cantVent: cantV,
+    fijas: Array.from({length: N}, (_, i) => document.getElementById('fija' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    chapas: Array.from({length: N}, (_, i) => document.getElementById('chapa' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    abres: Array.from({length: N}, (_, i) => document.getElementById('abre' + (i + 1))?.value).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    porFuera: Array.from({length: N}, (_, i) => document.getElementById('porFuera' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    dobleEng: Array.from({length: N}, (_, i) => document.getElementById('dobleEng' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    posNave: Array.from({length: N}, (_, i) => { let el=document.getElementById('posNave'+(i+1)); return el?el.value:((i===0)?'Exterior':(i===N-1)?'Interior':''); }).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {})
+ }, vista), false);
+ document.getElementById('planoTxt').innerText=`${vista} - ${r} ${rieles}R - ${colV} - ${A}x${H} - ${chapasPorVent} chapas - Grados jamba ${gradosJambaConfig[r]}°${fijasCount>0&&r=='7038'&&sillar7038Tipo=='empotrar'?' - CON ENGANCHE Y TRASLAPE FIJO':''}`;
+ let pv=document.getElementById('planoVidrio');
+ if(pv){
+  let cw=1200, ch=660;
+  pv.width=cw*dpr; pv.height=ch*dpr;
+  pv.style.width='100%'; pv.style.height='auto';
+  let g=pv.getContext('2d');
+  g.setTransform(dpr,0,0,dpr,0,0);g.imageSmoothingEnabled=false;
+  drawPlanoVidriosProfesional(g, 1200, 660, getPlanoDataFromItem({
+    naves: N, A: A, H: H, ref: r, rieles: rieles, colorV: colV, colorVid: colVid, cantVent: cantV,
+    fijas: Array.from({length: N}, (_, i) => document.getElementById('fija' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    chapas: Array.from({length: N}, (_, i) => document.getElementById('chapa' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    abres: Array.from({length: N}, (_, i) => document.getElementById('abre' + (i + 1))?.value).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    porFuera: Array.from({length: N}, (_, i) => document.getElementById('porFuera' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    dobleEng: Array.from({length: N}, (_, i) => document.getElementById('dobleEng' + (i + 1))?.checked).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {}),
+    posNave: Array.from({length: N}, (_, i) => { let el=document.getElementById('posNave'+(i+1)); return el?el.value:((i===0)?'Exterior':(i===N-1)?'Interior':''); }).reduce((acc, cur, i) => (acc[i + 1] = cur, acc), {})
+  }, vista), false);
+ }
+}
+let rielesEl=document.getElementById('rieles'),colorV=document.getElementById('colorV'),colorVid=document.getElementById('colorVid'),tabla=document.getElementById('tabla'),costos=document.getElementById('costos'),totalExactoEl=document.getElementById('totalExacto'),totalDespEl=document.getElementById('totalDesp'),totalBarrasEl=document.getElementById('totalBarras'),plano=document.getElementById('plano'),planoTxt=document.getElementById('planoTxt'),totPiezas=document.getElementById('totPiezas'),infoTop=document.getElementById('infoTop'),alfForm=document.getElementById('alfForm'),alfCant=document.getElementById('alfCant'),alfPrecio=document.getElementById('alfPrecio'),manoObraM2=document.getElementById('manoObraM2');
+let items=JSON.parse(localStorage.getItem('itemsProyV1')||'[]');
+let currentItemIdx=parseInt(localStorage.getItem('currentItemIdxV1')||'0');
+let proyectos=JSON.parse(localStorage.getItem('proyectosV1')||'{}');
+let theme=localStorage.getItem('themeV1')||'dark';
+if(theme==='light')document.body.classList.add('light');
+
+function getEmptyItem(){
+  return {id:Date.now()+Math.random(),ref:'744',rieles:'2',naves:'3',A:300,H:150,cantVent:1,colorV:'Negro',colorVid:'Transparente',alfajia:false,sillar7038:'empotrar',fijas:{},chapas:{},abres:{},porFuera:{},dobleEng:{},posNave:{}};
+}
+function saveCurrentItem(){
+  if(items.length===0)return;
+  let it=items[currentItemIdx]; if(!it)return;
+  it.ref=document.getElementById('ref').value;
+  it.rieles=document.getElementById('rieles').value;
+  it.naves=document.getElementById('naves').value;
+  it.A=parseFloat(document.getElementById('A').value)||0;
+  it.H=parseFloat(document.getElementById('H').value)||0;
+  it.cantVent=parseInt(document.getElementById('cantVent').value)||1;
+  it.colorV=document.getElementById('colorV').value;
+  it.colorVid=document.getElementById('colorVid').value;
+  it.alfajia=document.getElementById('alfajia').checked;
+  it.sillar7038=document.getElementById('sillarEmp')?.checked?'empotrar':'sobreponer';
+  it.fijas={};it.chapas={};it.abres={};it.porFuera={};it.dobleEng={};it.posNave={};
+  let N=parseInt(it.naves)||3;
+  for(let i=1;i<=N;i++){
+    it.fijas[i]=!!document.getElementById('fija'+i)?.checked;
+    it.chapas[i]=!!document.getElementById('chapa'+i)?.checked;
+    it.abres[i]=document.getElementById('abre'+i)?.value||'Derecha';
+    it.porFuera[i]=!!document.getElementById('porFuera'+i)?.checked;
+    it.dobleEng[i]=!!document.getElementById('dobleEng'+i)?.checked;
+    let pn=document.getElementById('posNave'+i);
+    it.posNave[i]=pn?(pn.value||''):'';
+  }
+  // Snapshot de fórmulas de esta ventana (por referencia + naves + rieles)
+  let r=it.ref, ri=String(it.rieles), nK=String(it.naves);
+  it.formulas={
+    horiz:(horizForms[r]&&horizForms[r][ri]&&(horizForms[r][ri][nK]||horizForms[r][ri][it.naves]))||'',
+    extra:JSON.parse(JSON.stringify(extraNaveForms||{})),
+    profiles:(current[r]||[]).map(function(o){return {el:o.el,form:o.form,cant:o.cant};})
+  };
+  localStorage.setItem('itemsProyV1',JSON.stringify(items));
+  localStorage.setItem('currentItemIdxV1',String(currentItemIdx));
+}
+function loadItem(idx){
+  if(!items[idx])return;
+  currentItemIdx=idx;
+  let it=items[idx];
+  document.getElementById('ref').value=it.ref||'744';
+  document.getElementById('rieles').value=it.rieles||'2';
+  updateNavesOptions();
+  document.getElementById('naves').value=it.naves||'3';
+  document.getElementById('A').value=it.A||300;
+  document.getElementById('H').value=it.H||150;
+  document.getElementById('cantVent').value=it.cantVent||1;
+  renderColors();
+  if(it.colorV)document.getElementById('colorV').value=it.colorV;
+  if(it.colorVid)document.getElementById('colorVid').value=it.colorVid;
+  document.getElementById('alfajia').checked=!!it.alfajia;
+  if(it.sillar7038==='sobreponer'){if(document.getElementById('sillarSobre'))document.getElementById('sillarSobre').checked=true;}
+  else{if(document.getElementById('sillarEmp'))document.getElementById('sillarEmp').checked=true;}
+  genNaves();
+  let N=parseInt(it.naves)||3;
+  for(let i=1;i<=N;i++){
+    if(document.getElementById('fija'+i))document.getElementById('fija'+i).checked=!!(it.fijas&&it.fijas[i]);
+    if(document.getElementById('chapa'+i))document.getElementById('chapa'+i).checked=it.chapas?!!it.chapas[i]:(i===1||i===N);
+    if(document.getElementById('abre'+i)&&it.abres&&it.abres[i])document.getElementById('abre'+i).value=it.abres[i];
+    if(document.getElementById('porFuera'+i))document.getElementById('porFuera'+i).checked=!!(it.porFuera&&it.porFuera[i]);
+    if(document.getElementById('dobleEng'+i))document.getElementById('dobleEng'+i).checked=!!(it.dobleEng&&it.dobleEng[i]);
+    if(document.getElementById('posNave'+i)&&it.posNave&&it.posNave[i])document.getElementById('posNave'+i).value=it.posNave[i];
+    if(document.getElementById('fija'+i))toggleFija(i);
+  }
+  // Restaurar fórmulas propias de esta ventana si las tiene
+  if(it.formulas){
+    let r=it.ref||'744', ri=String(it.rieles||'2'), nK=String(it.naves||'3');
+    if(it.formulas.horiz){
+      if(!horizForms[r])horizForms[r]={};if(!horizForms[r][ri])horizForms[r][ri]={};
+      horizForms[r][ri][nK]=it.formulas.horiz;horizForms[r][ri][it.naves]=it.formulas.horiz;
+    }
+    if(it.formulas.extra) extraNaveForms=JSON.parse(JSON.stringify(it.formulas.extra));
+    if(it.formulas.profiles&&current[r]){
+      it.formulas.profiles.forEach(function(p,i){if(current[r][i]){current[r][i].form=p.form;current[r][i].cant=p.cant;}});
+    }
+  }
+  renderCalib();renderHorizForm();loadAlf();loadMano();loadVenta();loadVidrio();renderAcc();loadSillar7038();loadAnchoGuias();
+  renderItemsList();
+  document.getElementById('itemActivoTxt').innerText='(Ventana '+(idx+1)+' de '+items.length+')';
+  calcular();
+}
+function switchItem(i){saveCurrentItem();loadItem(i);}
+function renderItemsList(){
+  let div=document.getElementById('itemsList'); if(!div)return;
+  div.innerHTML='';
+  items.forEach(function(it,i){
+    let active=i===currentItemIdx;
+    let d=document.createElement('div');
+    d.className='itemCard';
+    d.setAttribute('style', active? 'border-color:#22c55e;background:#0a1220;color:#e2e8f0':'');
+    d.onclick=function(){switchItem(i);};
+    d.innerHTML='<span><b>#'+(i+1)+'</b> '+(it.ref||'?')+' '+(it.rieles||'?')+'R '+(it.naves||'?')+'n - '+(it.A||0)+'x'+(it.H||0)+' cm ×'+(it.cantVent||1)+'</span><button class="delBtn" onclick="event.stopPropagation();delVentana('+i+')">✕</button>';
+    div.appendChild(d);
+  });
+}
+function addVentana(){
+  saveCurrentItem();
+  items.push(getEmptyItem());
+  currentItemIdx=items.length-1;
+  localStorage.setItem('itemsProyV1',JSON.stringify(items));
+  loadItem(currentItemIdx);
+}
+function delVentana(i){
+  if(!confirm('Eliminar ventana #'+(i+1)+'?'))return;
+  items.splice(i,1);
+  if(items.length===0)items.push(getEmptyItem());
+  if(currentItemIdx>=items.length)currentItemIdx=items.length-1;
+  localStorage.setItem('itemsProyV1',JSON.stringify(items));
+  loadItem(currentItemIdx);
+}
+function guardarProyecto(){
+  saveCurrentItem();
+  let nom=document.getElementById('proyNombre').value.trim()||('Proyecto_'+new Date().toISOString().slice(0,10));
+  let data={nombre:nom,fecha:new Date().toISOString(),items:items,current:current,horizForms:horizForms,preciosRiel:preciosRiel,alfConfig:alfConfig,manoConfig:manoConfig,ventaConfig:ventaConfig,acc:acc,coloresV:coloresV,coloresVid:coloresVid,vidrioConfig:vidrioConfig,fijo7038Config:fijo7038Config,gradosJambaConfig:gradosJambaConfig,extraNaveForms:extraNaveForms,teCantConfig:teCantConfig,anchoGuiasConfig:anchoGuiasConfig,empresaNombre:localStorage.getItem('empresaNombreV1')||'',empresaLogo:localStorage.getItem('empresaLogoV1')||''};
+  let blob=new Blob([JSON.stringify(data)],{type:'application/json'});
+  let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nom.replace(/\s+/g,'_')+'.json'; a.click();
+  alert('Proyecto guardado: '+nom);
+}
+function abrirProyecto(){
+  let inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json';
+  inp.onchange=function(){
+    let f=inp.files[0]; if(!f)return;
+    let reader=new FileReader();
+    reader.onload=function(){
+      try{
+        let p=JSON.parse(reader.result);
+        if(p.items)items=p.items;
+        if(p.current)current=p.current;
+        if(p.horizForms)horizForms=p.horizForms;
+        if(p.preciosRiel)preciosRiel=p.preciosRiel;
+        if(p.alfConfig)alfConfig=p.alfConfig;
+        if(p.manoConfig)manoConfig=p.manoConfig;
+        if(p.ventaConfig)ventaConfig=p.ventaConfig;
+        if(p.acc)acc=p.acc;
+        if(p.coloresV)coloresV=p.coloresV;
+        if(p.coloresVid)coloresVid=p.coloresVid;
+        if(p.vidrioConfig)vidrioConfig=p.vidrioConfig;
+        if(p.fijo7038Config)fijo7038Config=p.fijo7038Config;
+        if(p.gradosJambaConfig)gradosJambaConfig=p.gradosJambaConfig;
+        if(p.extraNaveForms)extraNaveForms=p.extraNaveForms;
+        if(p.teCantConfig)teCantConfig=p.teCantConfig;
+        if(p.anchoGuiasConfig)anchoGuiasConfig=p.anchoGuiasConfig;
+        if(p.empresaNombre)localStorage.setItem('empresaNombreV1',p.empresaNombre);
+        if(p.empresaLogo)localStorage.setItem('empresaLogoV1',p.empresaLogo);
+        if(p.nombre)document.getElementById('proyNombre').value=p.nombre;
+        save(); loadEmpresa(); renderRefs();
+        currentItemIdx=0;
+        if(items.length===0)items.push(getEmptyItem());
+        loadItem(0);
+        alert('Proyecto abierto');
+      }catch(e){alert('Error al abrir: '+e.message);}
+    };
+    reader.readAsText(f);
+  };
+  inp.click();
+}
+function recordarConfig(){save();saveCurrentItem();alert('Configuración recordada en este dispositivo');}
+function toggleTheme(){
+  document.body.classList.toggle('light');
+  theme=document.body.classList.contains('light')?'light':'dark';
+  localStorage.setItem('themeV1',theme);
+}
+function toggleFab(){
+  let fab=document.getElementById('fabBar');
+  let tog=document.getElementById('fabToggle');
+  let btn=document.getElementById('fabHdrBtn');
+  if(!fab)return;
+  let hide=!fab.classList.contains('hidden');
+  if(hide){fab.classList.add('hidden');if(tog)tog.classList.add('show');localStorage.setItem('fabHiddenV1','1');if(btn){btn.textContent='\uD83D\uDCA1 FABs';btn.style.background='#64748b';btn.style.color='#94a3b8';}}
+  else{fab.classList.remove('hidden');if(tog)tog.classList.remove('show');localStorage.setItem('fabHiddenV1','0');if(btn){btn.innerHTML='<span class="ico">\uD83D\uDCA1</span> FABs';btn.style.background='#22c55e';btn.style.color='#000';}}
+}
+function cargarLogoEmpresa(inp){
+  let f=inp.files&&inp.files[0]; if(!f)return;
+  let r=new FileReader();
+  r.onload=function(){
+   let data=r.result;
+   localStorage.setItem('empresaLogoV1',data);
+   let el=document.getElementById('empresaLogoImg');
+   let empty=document.getElementById('empresaLogoEmpty');
+   if(el){el.src=data;el.style.display='block';}
+   if(empty)empty.style.display='none';
+  };
+  r.readAsDataURL(f);
+}
+function saveEmpresa(){
+ let n=document.getElementById('empresaNombre');
+ if(n) localStorage.setItem('empresaNombreV1',n.value||'');
+}
+function loadEmpresa(){
+ let n=document.getElementById('empresaNombre');
+ if(n) n.value=localStorage.getItem('empresaNombreV1')||'';
+ let data=localStorage.getItem('empresaLogoV1');
+ if(data){
+   let el=document.getElementById('empresaLogoImg');
+   let empty=document.getElementById('empresaLogoEmpty');
+   if(el){el.src=data;el.style.display='block';}
+   if(empty)empty.style.display='none';
+ }
+}
+loadEmpresa();
+if(items.length===0)items.push(getEmptyItem());
+renderRefs();
+loadItem(Math.min(currentItemIdx,items.length-1));
+document.body.insertAdjacentHTML('beforeend',`
+<div class="fabBar" id="fabBar">
+  <button onclick="toggleLock()" id="lockFabBtn" style="background:#ef4444;color:#fff" title="Bloqueado">\uD83D\uDD12</button>
+  <button onclick="guardarProyecto()" style="background:#22c55e;color:#000" title="Guardar">\uD83D\uDCBE</button>
+  <button onclick="recordarConfig()" style="background:#a78bfa;color:#000" title="Config">\uD83D\uDCCC</button>
+  <button onclick="toggleFab()" style="background:#64748b;color:#fff;width:32px;height:32px;min-width:32px;font-size:12px" title="Ocultar">\u2715</button>
+</div>
+<button class="fabToggle" id="fabToggle" onclick="toggleFab()" title="Mostrar botones">\uD83D\uDCBE</button>
+`);
+if(localStorage.getItem('fabHiddenV1')==='1'){
+  let fab=document.getElementById('fabBar');
+  let tog=document.getElementById('fabToggle');
+  if(fab)fab.classList.add('hidden');
+  if(tog)tog.classList.add('show');
+}
+</script></body></html>
